@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-02T13:52:00.032Z
-commit: 694fc5f
-fingerprint: 130a1fa82ed3cb3f
+generated: 2026-10-02T13:52:52.071Z
+commit: f6bfe49
+fingerprint: 5e7917078be60106
 -->
 # Code Map (Agent Navigation)
 
@@ -15,7 +15,7 @@ disagree, the code wins and the map is regenerated.
 ## Summary
 
 - Files indexed: 61
-- Total lines indexed: 4,119
+- Total lines indexed: 4,120
 - Anchor index emitted for files over 300 lines: 2
 
 ### Areas
@@ -24,7 +24,7 @@ disagree, the code wins and the map is regenerated.
 |---|---:|---:|
 | `.` | 4 | 85 |
 | `eslint-rules` | 2 | 140 |
-| `scripts` | 4 | 682 |
+| `scripts` | 4 | 683 |
 | `src` | 5 | 1,043 |
 | `src-tauri` | 2 | 56 |
 | `src-tauri/src` | 5 | 212 |
@@ -63,7 +63,7 @@ disagree, the code wins and the map is regenerated.
 | `generate-code-map.mjs` | 327 | Agent Navigation Map Generator |
 | `verify-ui.mjs` | 221 | Verify Ui |
 | `verify-contrast.mjs` | 68 | Verify Contrast |
-| `verify-text.mjs` | 66 | Verify Text |
+| `verify-text.mjs` | 67 | Verify Text |
 
 ## src
 

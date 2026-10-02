@@ -13,10 +13,11 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-const DASH = /[–—]/u;
+// Built from code points so this file never contains the characters it bans.
+const DASH = new RegExp("[" + String.fromCodePoint(0x2013, 0x2014) + "]", "u");
 const EMOJI = /\p{Extended_Pictographic}/u;
 // Extended_Pictographic also covers a few typographic symbols that are legal in copy.
-const ALLOWED = new Set(["©", "®", "™", "ℹ"]);
+const ALLOWED = new Set([0xa9, 0xae, 0x2122, 0x2139].map((point) => String.fromCodePoint(point)));
 const BINARY = /\.(png|ico|icns|woff2?|ttf|otf|jpe?g|gif|webp|zip|exe|msi)$/i;
 const GENERATED = new Set(["package-lock.json", "src-tauri/Cargo.lock"]);
 const VENDORED = /^src\/assets\/fonts\/LICENSE-/;
