@@ -39,6 +39,9 @@ jobs:
       - name: Lint (Tanaw invariants and correctness)
         run: npm run lint
 
+      - name: Text invariants in every tracked file
+        run: npm run verify:text
+
       - name: Unit tests
         run: npm test
 

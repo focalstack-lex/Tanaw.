@@ -21,7 +21,7 @@ npm run dev:ui     # the renderer alone, in a browser, with mocked IPC
 ## Verify
 
 ```
-npm run verify     # typecheck, lint invariants, unit tests, contrast, code map freshness
+npm run verify     # typecheck, lint invariants, text invariants in every tracked file, unit tests, contrast, code map freshness
 npm run verify:ui  # drives the mocked renderer with Playwright; evidence in reports/ui-verification
 cd src-tauri && cargo test && cargo clippy --all-targets -- -D warnings
 ```
