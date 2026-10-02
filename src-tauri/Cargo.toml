@@ -1,0 +1,51 @@
+[package]
+name = "tanaw"
+version = "0.1.0"
+description = "Tanaw: a calm, focused file manager for Windows"
+authors = ["Lex Matondo"]
+license = "MIT"
+edition = "2021"
+rust-version = "1.85"
+
+[lib]
+# The `_lib` suffix keeps the library name distinct from the binary on Windows.
+name = "tanaw_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+# Shell and plugins. Window state remembers geometry; log writes a rotating
+# file under the app log directory. Both are Rust-side only: nothing is
+# exposed to the renderer.
+tauri = { version = "2", features = [] }
+tauri-plugin-log = "2"
+tauri-plugin-window-state = "2"
+# IPC serialization.
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# App data: SQLite compiled in, so no system library is required.
+rusqlite = { version = "0.40", features = ["bundled"] }
+# Error enum derivation and the logging facade.
+thiserror = "2"
+log = "0.4"
+
+[dev-dependencies]
+tempfile = "3"
+
+[lints.rust]
+unsafe_code = "deny"
+
+[lints.clippy]
+# Release builds abort on panic (below), so command code must never panic.
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+panic = "abort"
+strip = true
