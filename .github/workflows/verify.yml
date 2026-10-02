@@ -42,5 +42,37 @@ jobs:
       - name: Unit tests
         run: npm test
 
+      - name: Token contrast
+        run: npm run verify:contrast
+
       - name: Code map freshness
         run: npm run map:code:check
+
+  ui:
+    name: UI drive (Playwright)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chromium for the drive
+        run: npx playwright install --with-deps chromium
+
+      - name: Drive the interface and capture evidence
+        run: npm run verify:ui
+
+      - name: Upload drive evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-verification-evidence
+          path: reports/ui-verification/**
+          if-no-files-found: ignore
+          retention-days: 14

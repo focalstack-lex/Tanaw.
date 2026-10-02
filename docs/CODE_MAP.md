@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-02T10:33:33.734Z
-commit: 6bd7d90
-fingerprint: 4dcffcf6fd517f47
+generated: 2026-10-02T10:53:23.258Z
+commit: 02659d7
+fingerprint: 0ace6da9995185bd
 -->
 # Code Map (Agent Navigation)
 
@@ -14,9 +14,9 @@ disagree, the code wins and the map is regenerated.
 
 ## Summary
 
-- Files indexed: 11
-- Total lines indexed: 626
-- Anchor index emitted for files over 300 lines: 1
+- Files indexed: 58
+- Total lines indexed: 4,011
+- Anchor index emitted for files over 300 lines: 2
 
 ### Areas
 
@@ -24,9 +24,21 @@ disagree, the code wins and the map is regenerated.
 |---|---:|---:|
 | `.` | 3 | 84 |
 | `eslint-rules` | 2 | 140 |
-| `scripts` | 1 | 327 |
-| `src` | 4 | 32 |
-| `src/tests` | 1 | 43 |
+| `scripts` | 3 | 616 |
+| `src` | 5 | 1,043 |
+| `src-tauri` | 2 | 56 |
+| `src-tauri/src` | 5 | 212 |
+| `src-tauri/src/data` | 3 | 215 |
+| `src-tauri/src/db` | 3 | 204 |
+| `src/components/home` | 1 | 18 |
+| `src/components/palette` | 1 | 91 |
+| `src/components/settings` | 1 | 77 |
+| `src/components/shell` | 4 | 212 |
+| `src/components/ui` | 7 | 162 |
+| `src/dev` | 1 | 93 |
+| `src/lib` | 7 | 282 |
+| `src/store` | 4 | 241 |
+| `src/tests` | 6 | 265 |
 
 ## .
 
@@ -48,21 +60,128 @@ disagree, the code wins and the map is regenerated.
 | File | Lines | Purpose |
 |---|---:|---|
 | `generate-code-map.mjs` | 327 | Agent Navigation Map Generator |
+| `verify-ui.mjs` | 221 | Verify Ui |
+| `verify-contrast.mjs` | 68 | Verify Contrast |
 
 ## src
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `main.tsx` | 13 | Main |
-| `styles.css` | 9 | Styles |
-| `App.tsx` | 8 | App |
+| `styles.css` | 902 | Styles |
+| `App.tsx` | 71 | App |
+| `types.ts` | 44 | Types |
+| `main.tsx` | 24 | Main |
 | `vite-env.d.ts` | 2 | Vite Env.D |
+
+## src-tauri
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `Cargo.toml` | 52 | Cargo |
+| `build.rs` | 4 | Build |
+
+## src-tauri/src
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `error.rs` | 94 | Error |
+| `lib.rs` | 56 | Lib |
+| `state.rs` | 31 | State |
+| `app.rs` | 24 | App |
+| `main.rs` | 7 | Main |
+
+## src-tauri/src/data
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `settings.rs` | 141 | Settings |
+| `settings/tests.rs` | 70 | Tests |
+| `mod.rs` | 4 | Mod |
+
+## src-tauri/src/db
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `mod.rs` | 98 | Mod |
+| `tests.rs` | 56 | Tests |
+| `migrations/0001_init.sql` | 50 | Init |
+
+## src/components/home
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `HomeView.tsx` | 18 | HomeView |
+
+## src/components/palette
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `CommandPalette.tsx` | 91 | CommandPalette |
+
+## src/components/settings
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `SettingsView.tsx` | 77 | SettingsView |
+
+## src/components/shell
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `TitleBar.tsx` | 87 | TitleBar |
+| `SidePanel.tsx` | 51 | SidePanel |
+| `Sidebar.tsx` | 48 | Sidebar |
+| `StatusBar.tsx` | 26 | StatusBar |
+
+## src/components/ui
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `ConfirmDialog.tsx` | 55 | ConfirmDialog |
+| `Toasts.tsx` | 24 | Toasts |
+| `Field.tsx` | 22 | Field |
+| `EmptyState.tsx` | 19 | EmptyState |
+| `IconButton.tsx` | 17 | IconButton |
+| `Button.tsx` | 13 | Button |
+| `Kbd.tsx` | 12 | Kbd |
+
+## src/dev
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `mockBackend.ts` | 93 | MockBackend |
+
+## src/lib
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `commands.ts` | 81 | Commands |
+| `shortcuts.ts` | 60 | Shortcuts |
+| `appCommands.ts` | 48 | AppCommands |
+| `ipc.ts` | 30 | Ipc |
+| `theme.ts` | 27 | Theme |
+| `errors.ts` | 22 | Errors |
+| `defaults.ts` | 14 | Defaults |
+
+## src/store
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `tabs.ts` | 101 | Tabs |
+| `ui.ts` | 72 | Ui |
+| `settings.ts` | 52 | Settings |
+| `panel.ts` | 16 | Panel |
 
 ## src/tests
 
 | File | Lines | Purpose |
 |---|---:|---|
+| `tabs.test.ts` | 75 | Tabs.Test |
+| `commands.test.ts` | 54 | Commands.Test |
+| `shortcuts.test.ts` | 50 | Shortcuts.Test |
 | `invariants.test.ts` | 43 | Invariants.Test |
+| `featureMap.test.ts` | 31 | FeatureMap.Test |
+| `theme.test.ts` | 12 | Theme.Test |
 
 ## Anchor Index
 
