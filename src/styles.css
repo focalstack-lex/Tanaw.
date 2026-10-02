@@ -232,18 +232,33 @@ button {
 .titlebar-tabs {
   display: flex;
   align-items: flex-end;
-  gap: 2px;
   min-width: 0;
   padding: var(--s-1) 0 0 var(--s-2);
-  overflow: hidden;
+}
+
+/* Tabs keep a readable width and scroll sideways when they outnumber the strip;
+   New tab sits outside the scroller so it is always reachable. */
+.tab-scroller {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.tab-scroller::-webkit-scrollbar {
+  display: none;
 }
 
 .tab {
   display: flex;
+  flex: 0 1 200px;
   align-items: center;
   gap: var(--s-2);
   height: 30px;
-  min-width: 0;
+  min-width: 96px;
   max-width: 200px;
   padding: 0 var(--s-2) 0 var(--s-3);
   border-radius: var(--r-md) var(--r-md) 0 0;
@@ -270,6 +285,7 @@ button {
 
 .tab-close {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   width: 18px;
@@ -291,6 +307,7 @@ button {
 }
 
 .titlebar-tabs .icon-btn {
+  flex-shrink: 0;
   align-self: center;
   margin-left: var(--s-1);
 }

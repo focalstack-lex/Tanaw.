@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import { installBrowserGuard } from "./lib/browserGuard";
 import { applyTheme } from "./lib/theme";
 import "./styles.css";
 
@@ -13,6 +14,9 @@ if (import.meta.env.DEV && !("__TAURI_INTERNALS__" in window)) {
 
 // Paint the system theme before the first frame; settings may switch it after loading.
 applyTheme("system");
+
+// Claim right-click and the browser's reload, print and find keys from WebView2.
+installBrowserGuard();
 
 const root = document.getElementById("root");
 if (!root) throw new Error("Tanaw: index.html has no #root element");

@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-02T13:52:52.071Z
-commit: f6bfe49
-fingerprint: 5e7917078be60106
+generated: 2026-10-02T14:00:11.928Z
+commit: 3fa1529
+fingerprint: 90a732eebaa9e2e0
 -->
 # Code Map (Agent Navigation)
 
@@ -14,9 +14,9 @@ disagree, the code wins and the map is regenerated.
 
 ## Summary
 
-- Files indexed: 61
-- Total lines indexed: 4,120
-- Anchor index emitted for files over 300 lines: 2
+- Files indexed: 65
+- Total lines indexed: 4,488
+- Anchor index emitted for files over 300 lines: 3
 
 ### Areas
 
@@ -24,21 +24,21 @@ disagree, the code wins and the map is regenerated.
 |---|---:|---:|
 | `.` | 4 | 85 |
 | `eslint-rules` | 2 | 140 |
-| `scripts` | 4 | 683 |
-| `src` | 5 | 1,043 |
+| `scripts` | 4 | 812 |
+| `src` | 5 | 1,079 |
 | `src-tauri` | 2 | 56 |
 | `src-tauri/src` | 5 | 212 |
 | `src-tauri/src/data` | 3 | 215 |
 | `src-tauri/src/db` | 3 | 204 |
 | `src/components/home` | 1 | 18 |
-| `src/components/palette` | 1 | 91 |
+| `src/components/palette` | 1 | 138 |
 | `src/components/settings` | 1 | 77 |
-| `src/components/shell` | 4 | 212 |
-| `src/components/ui` | 7 | 162 |
+| `src/components/shell` | 4 | 230 |
+| `src/components/ui` | 7 | 166 |
 | `src/dev` | 1 | 93 |
-| `src/lib` | 7 | 282 |
-| `src/store` | 4 | 241 |
-| `src/tests` | 7 | 306 |
+| `src/lib` | 9 | 347 |
+| `src/store` | 4 | 250 |
+| `src/tests` | 9 | 366 |
 
 ## .
 
@@ -60,8 +60,8 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
+| `verify-ui.mjs` | 350 | Verify Ui |
 | `generate-code-map.mjs` | 327 | Agent Navigation Map Generator |
-| `verify-ui.mjs` | 221 | Verify Ui |
 | `verify-contrast.mjs` | 68 | Verify Contrast |
 | `verify-text.mjs` | 67 | Verify Text |
 
@@ -69,10 +69,10 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `styles.css` | 902 | Styles |
-| `App.tsx` | 71 | App |
+| `styles.css` | 919 | Styles |
+| `App.tsx` | 86 | App |
 | `types.ts` | 44 | Types |
-| `main.tsx` | 24 | Main |
+| `main.tsx` | 28 | Main |
 | `vite-env.d.ts` | 2 | Vite Env.D |
 
 ## src-tauri
@@ -118,7 +118,7 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `CommandPalette.tsx` | 91 | CommandPalette |
+| `CommandPalette.tsx` | 138 | CommandPalette |
 
 ## src/components/settings
 
@@ -130,7 +130,7 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `TitleBar.tsx` | 87 | TitleBar |
+| `TitleBar.tsx` | 105 | TitleBar |
 | `SidePanel.tsx` | 51 | SidePanel |
 | `Sidebar.tsx` | 48 | Sidebar |
 | `StatusBar.tsx` | 26 | StatusBar |
@@ -139,7 +139,7 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `ConfirmDialog.tsx` | 55 | ConfirmDialog |
+| `ConfirmDialog.tsx` | 59 | ConfirmDialog |
 | `Toasts.tsx` | 24 | Toasts |
 | `Field.tsx` | 22 | Field |
 | `EmptyState.tsx` | 19 | EmptyState |
@@ -160,9 +160,11 @@ disagree, the code wins and the map is regenerated.
 | `commands.ts` | 81 | Commands |
 | `shortcuts.ts` | 60 | Shortcuts |
 | `appCommands.ts` | 48 | AppCommands |
+| `browserGuard.ts` | 47 | BrowserGuard |
 | `ipc.ts` | 30 | Ipc |
 | `theme.ts` | 27 | Theme |
 | `errors.ts` | 22 | Errors |
+| `useRestoreFocus.ts` | 18 | UseRestoreFocus |
 | `defaults.ts` | 14 | Defaults |
 
 ## src/store
@@ -172,7 +174,7 @@ disagree, the code wins and the map is regenerated.
 | `tabs.ts` | 101 | Tabs |
 | `ui.ts` | 72 | Ui |
 | `settings.ts` | 52 | Settings |
-| `panel.ts` | 16 | Panel |
+| `panel.ts` | 25 | Panel |
 
 ## src/tests
 
@@ -181,15 +183,26 @@ disagree, the code wins and the map is regenerated.
 | `tabs.test.ts` | 75 | Tabs.Test |
 | `commands.test.ts` | 54 | Commands.Test |
 | `shortcuts.test.ts` | 50 | Shortcuts.Test |
+| `browserGuard.test.ts` | 46 | BrowserGuard.Test |
 | `invariants.test.ts` | 43 | Invariants.Test |
 | `textInvariants.test.ts` | 41 | TextInvariants.Test |
 | `featureMap.test.ts` | 31 | FeatureMap.Test |
+| `panel.test.ts` | 14 | Panel.Test |
 | `theme.test.ts` | 12 | Theme.Test |
 
 ## Anchor Index
 
 Files over 300 lines. Each entry is a line number to jump to, so a target
 resolves to a window instead of a full read.
+
+### `scripts/verify-ui.mjs` (350 lines)
+
+- 40: `record()` | 45: `sleep()` | 47: `waitForServer()`
+- 61: `startDevServer()` | 73: `stopDevServer()` | 83: `open()`
+- 92: `visible()` | 101: `hidden()` | 110: `capture()`
+- 112: `drive()` | 165: `status()` | 204: `fire()`
+- 205: `menu()` | 206: `key()` | 284: `layoutReport()`
+- 303: `errorToasts()` | 307: `main()`
 
 ### `scripts/generate-code-map.mjs` (327 lines)
 

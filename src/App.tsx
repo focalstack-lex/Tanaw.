@@ -3,7 +3,7 @@ import { ensureAppCommands } from "./lib/appCommands";
 import { commandForKey } from "./lib/commands";
 import { describeError } from "./lib/errors";
 import { ipc, toTanawError } from "./lib/ipc";
-import { usePanel } from "./store/panel";
+import { OVERLAY_QUERY, usePanel } from "./store/panel";
 import { useSettings } from "./store/settings";
 import { activeTab, useTabs } from "./store/tabs";
 import { useUi } from "./store/ui";
@@ -34,11 +34,26 @@ export default function App() {
     });
   }, [load, setAppInfo]);
 
+  // Crossing the overlay breakpoint closes the panel (it would cover the content)
+  // and widening past it docks the panel open again.
+  useEffect(() => {
+    const media = window.matchMedia(OVERLAY_QUERY);
+    const onChange = () => usePanel.getState().setOpen(!media.matches);
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+
   // One key handler for every shortcut; overlays own their keys while open.
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       const ui = useUi.getState();
       if (ui.paletteOpen || ui.confirm) return;
+      // Escape dismisses the panel when it is overlaying the content.
+      if (event.key === "Escape" && usePanel.getState().open && window.matchMedia(OVERLAY_QUERY).matches) {
+        event.preventDefault();
+        usePanel.getState().setOpen(false);
+        return;
+      }
       const command = commandForKey(event);
       if (!command) return;
       event.preventDefault();

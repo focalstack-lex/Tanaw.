@@ -27,7 +27,7 @@ const BASE_URL = `http://${HOST}:${PORT}`;
 const READY_TIMEOUT_MS = 60_000;
 const STEP_TIMEOUT_MS = 8_000;
 const VIEWPORT = { width: 1280, height: 820 };
-const NARROW = { width: 800, height: 600 };
+const MIN_WINDOW = { width: 720, height: 480 }; // tauri.conf.json minWidth and minHeight
 const HEADED = process.argv.includes("--headed");
 
 const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
@@ -84,6 +84,9 @@ async function open(page) {
   await page.goto(BASE_URL, { waitUntil: "domcontentloaded" });
   await page.waitForSelector('[data-testid="app"]', { timeout: READY_TIMEOUT_MS });
   await sleep(300);
+  // A failed boot IPC call (settings, app info) surfaces only as an error toast.
+  const toasts = await page.locator(".toast-error").allTextContents();
+  if (toasts.length > 0) record("No error toast after the app loads", false, toasts.join(" | "));
 }
 
 async function visible(page, selector) {
@@ -163,17 +166,142 @@ async function drive(browser) {
   record("Ctrl+H reports hidden files in the status bar", status.includes("Hidden files shown"), JSON.stringify(status));
   await page.keyboard.press("Control+KeyH");
 
-  // 7. Narrow window: sidebar rail, no horizontal overflow.
-  await page.setViewportSize(NARROW);
+  // 7. The palette keeps focus inside, Escape always closes it, and focus returns.
+  await open(page);
+  await page.focus('[data-testid="tab-new"]');
+  await page.keyboard.press("Control+KeyK");
+  await visible(page, '[data-testid="command-palette"]');
+  await page.keyboard.press("Tab");
+  const focusInside = await page.evaluate(() => Boolean(document.activeElement?.closest(".palette")));
+  await page.keyboard.press("Escape");
+  const closedAfterTab = await hidden(page, '[data-testid="command-palette"]');
+  const focusReturned = await page.evaluate(() => document.activeElement?.getAttribute("data-testid") ?? document.activeElement?.tagName);
+  record("Palette traps Tab, Escape closes it after Tab, focus returns to the opener", focusInside && closedAfterTab && focusReturned === "tab-new",
+    `focusInside=${focusInside} closed=${closedAfterTab} focusReturnedTo=${focusReturned}`);
+
+  // 8. Arrow keys keep the active command in view and announce it.
+  await open(page);
+  await page.keyboard.press("Control+KeyK");
+  await visible(page, '[data-testid="command-palette"]');
+  for (let i = 0; i < 15; i += 1) await page.keyboard.press("ArrowDown");
+  const active = await page.evaluate(() => {
+    const list = document.querySelector(".palette-list")?.getBoundingClientRect();
+    const option = document.querySelector('.palette-item[aria-selected="true"]');
+    const rect = option?.getBoundingClientRect();
+    const input = document.querySelector(".palette-input");
+    return {
+      inView: Boolean(list && rect && rect.top >= list.top - 1 && rect.bottom <= list.bottom + 1),
+      announced: Boolean(option?.id) && input?.getAttribute("aria-activedescendant") === option?.id,
+    };
+  });
+  await capture(page, "05-palette-scrolled");
+  await page.keyboard.press("Escape");
+  record("Palette scrolls the active command into view and sets aria-activedescendant", active.inView && active.announced, JSON.stringify(active));
+
+  // 9. The app owns right-click and the browser's reload, print and find keys.
+  await open(page);
+  const chrome = await page.evaluate(() => {
+    const fire = (target, event) => { target.dispatchEvent(event); return event.defaultPrevented; };
+    const menu = () => new MouseEvent("contextmenu", { bubbles: true, cancelable: true });
+    const key = (init) => new KeyboardEvent("keydown", { bubbles: true, cancelable: true, ...init });
+    const field = document.createElement("input");
+    document.body.appendChild(field);
+    const result = {
+      contentMenuBlocked: fire(document.querySelector('[data-testid="content"]'), menu()),
+      fieldMenuKept: !fire(field, menu()),
+      f5Blocked: fire(document.body, key({ key: "F5" })),
+      ctrlRBlocked: fire(document.body, key({ key: "r", ctrlKey: true })),
+      ctrlPBlocked: fire(document.body, key({ key: "p", ctrlKey: true })),
+      ctrlFBlocked: fire(document.body, key({ key: "f", ctrlKey: true })),
+    };
+    field.remove();
+    return result;
+  });
+  record("Right-click and browser reload, print and find keys are suppressed; fields keep their menu", Object.values(chrome).every(Boolean), JSON.stringify(chrome));
+
+  // 10. Narrow windows: real per-region overflow at 800 px and at the 720 px minimum.
+  for (const size of [{ width: 800, height: 600 }, MIN_WINDOW]) {
+    await page.setViewportSize(size);
+    await sleep(200);
+    const layout = await layoutReport(page);
+    await capture(page, `06-layout-${size.width}`);
+    record(`${size.width} px: sidebar is a 40 to 48 px rail and no region overflows`, layout.ok, JSON.stringify(layout));
+  }
+
+  // 11. Many tabs at the minimum width: New tab stays reachable and controls keep their size.
+  await open(page);
+  for (let i = 0; i < 11; i += 1) await page.keyboard.press("Control+KeyT");
   await sleep(200);
-  const narrow = await page.evaluate(() => ({
-    sidebar: document.querySelector('[data-testid="sidebar"]')?.getBoundingClientRect().width ?? 0,
-    overflow: document.documentElement.scrollWidth > window.innerWidth,
-  }));
-  await capture(page, "05-narrow");
-  record("800 px: sidebar collapses to a rail and nothing overflows", narrow.sidebar <= 48 && !narrow.overflow, JSON.stringify(narrow));
+  const strip = await page.evaluate(() => {
+    const button = document.querySelector('[data-testid="tab-new"]')?.getBoundingClientRect();
+    const controls = document.querySelector(".window-controls")?.getBoundingClientRect();
+    const activeTab = document.querySelector('.tab.is-active')?.getBoundingClientRect();
+    const tabsBox = document.querySelector(".titlebar-tabs")?.getBoundingClientRect();
+    const hit = button ? document.elementFromPoint(button.left + button.width / 2, button.top + button.height / 2) : null;
+    const closeWidth = document.querySelector('.tab.is-active .tab-close')?.getBoundingClientRect().width ?? 0;
+    return {
+      tabs: document.querySelectorAll('[data-testid="tab"]').length,
+      newTabWidth: Math.round(button?.width ?? 0),
+      newTabReachable: Boolean(hit?.closest('[data-testid="tab-new"]')) && Boolean(button && controls && button.right <= controls.left),
+      closeWidth: Math.round(closeWidth),
+      activeTabVisible: Boolean(activeTab && tabsBox && activeTab.left >= tabsBox.left - 1 && activeTab.right <= tabsBox.right + 1),
+    };
+  });
+  await capture(page, "07-many-tabs-720");
+  record("12 tabs at 720 px: New tab reachable at full size, close buttons keep their size, active tab visible",
+    strip.tabs === 12 && strip.newTabWidth >= 28 && strip.newTabReachable && strip.closeWidth >= 16 && strip.activeTabVisible, JSON.stringify(strip));
+  record("No error toasts during the main drive", (await errorToasts(page)) === 0);
 
   await context.close();
+
+  // 12. A 1024 px window opens with the panel closed, so Settings controls are reachable.
+  const narrowContext = await browser.newContext({ viewport: { width: 1024, height: 700 }, colorScheme: "dark" });
+  const narrowPage = await narrowContext.newPage();
+  narrowPage.on("console", (message) => { if (message.type() === "error") consoleErrors.push(message.text()); });
+  narrowPage.on("pageerror", (error) => pageErrors.push(error.message));
+  await open(narrowPage);
+  const panelClosedAtStart = !(await narrowPage.locator('[data-testid="side-panel"]').isVisible());
+  await narrowPage.keyboard.press("Control+Comma");
+  await visible(narrowPage, '[data-testid="settings-view"]');
+  const selectReachable = await narrowPage.evaluate(() => {
+    const select = document.querySelector('[data-testid="setting-theme"]');
+    const rect = select?.getBoundingClientRect();
+    return Boolean(rect) && document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2) === select;
+  });
+  await narrowPage.keyboard.press("Control+Shift+KeyE");
+  const overlayOpened = await visible(narrowPage, '[data-testid="side-panel"]');
+  await narrowPage.keyboard.press("Escape");
+  const overlayDismissed = await hidden(narrowPage, '[data-testid="side-panel"]');
+  await capture(narrowPage, "08-settings-1024");
+  record("1024 px: panel starts closed, Settings controls are reachable, the overlay opens and Escape dismisses it",
+    panelClosedAtStart && selectReachable && overlayOpened && overlayDismissed,
+    `closedAtStart=${panelClosedAtStart} selectReachable=${selectReachable} overlayOpened=${overlayOpened} escapeDismissed=${overlayDismissed}`);
+  record("No error toasts in the narrow window", (await errorToasts(narrowPage)) === 0);
+  await narrowContext.close();
+}
+
+/** Every region must fit its own box and the window; the sidebar must be the rail. */
+async function layoutReport(page) {
+  return page.evaluate(() => {
+    const regions = {};
+    let ok = true;
+    for (const selector of ['[data-testid="titlebar"]', ".titlebar-tabs", '[data-testid="sidebar"]', '[data-testid="content"]', '[data-testid="statusbar"]', '[data-testid="side-panel"]']) {
+      const el = document.querySelector(selector);
+      if (!el) continue;
+      const rect = el.getBoundingClientRect();
+      const overflow = el.scrollWidth > el.clientWidth + 1 || rect.right > window.innerWidth + 0.5;
+      if (overflow) ok = false;
+      regions[selector] = { scrollWidth: el.scrollWidth, clientWidth: el.clientWidth, right: Math.round(rect.right), overflow };
+    }
+    const sidebar = document.querySelector('[data-testid="sidebar"]');
+    const rail = sidebar ? sidebar.getBoundingClientRect().width : -1;
+    if (rail < 40 || rail > 48) ok = false;
+    return { ok, rail, width: window.innerWidth, regions };
+  });
+}
+
+async function errorToasts(page) {
+  return page.locator(".toast-error").count();
 }
 
 async function main() {
@@ -201,10 +329,11 @@ async function main() {
       [...consoleErrors.map((line) => `[console.error] ${line}`), ...pageErrors.map((line) => `[pageerror] ${line}`)].join("\n") || "no console errors and no uncaught page errors\n",
     );
     process.stdout.write(`\nEvidence written to ${EVIDENCE_DIR}\n`);
-    if (consoleErrors.length > 0) process.stdout.write(`[WARN] ${consoleErrors.length} console error(s) recorded; see console.log\n`);
+    // Console errors fail the run: a renderer that logs errors is not passing.
+    if (consoleErrors.length > 0) process.stderr.write(`[FAIL] ${consoleErrors.length} console error(s):\n${consoleErrors.join("\n")}\n`);
     if (pageErrors.length > 0) process.stderr.write(`[FAIL] ${pageErrors.length} uncaught page error(s):\n${pageErrors.join("\n")}\n`);
     if (failed.length > 0) process.stderr.write(`[FAIL] ${failed.length} surface check(s) failed.\n`);
-    if (failed.length > 0 || pageErrors.length > 0) exitCode = 1;
+    if (failed.length > 0 || pageErrors.length > 0 || consoleErrors.length > 0) exitCode = 1;
     process.stdout.write(exitCode === 0 ? "\n[UI VERIFY PASS] The interface renders and every mapped surface works.\n" : "\n[UI VERIFY FAIL] See the failures above.\n");
   } catch (error) {
     process.stderr.write(`[UI VERIFY ERROR] ${error.stack || error.message}\n`);

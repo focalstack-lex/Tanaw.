@@ -1,12 +1,16 @@
 import { useEffect, useRef, type KeyboardEvent } from "react";
+import { useRestoreFocus } from "../../lib/useRestoreFocus";
 import { useUi } from "../../store/ui";
 import { Button } from "./Button";
 
-/** Renders the pending question from the ui store; Escape and the backdrop answer no. */
+/** Renders the pending question from the ui store; Escape and the backdrop answer no; focus returns to the opener. */
 export function ConfirmDialog() {
   const confirm = useUi((state) => state.confirm);
   const answer = useUi((state) => state.answer);
   const primary = useRef<HTMLButtonElement>(null);
+
+  // Declared before the focus effect so it records the opener, not the dialog's button.
+  useRestoreFocus(Boolean(confirm));
 
   useEffect(() => {
     if (confirm) primary.current?.focus();

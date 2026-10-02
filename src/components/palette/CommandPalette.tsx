@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { isAvailable, listCommands, type Command, type CommandGroup } from "../../lib/commands";
+import { useRestoreFocus } from "../../lib/useRestoreFocus";
 import { useUi } from "../../store/ui";
 import { Kbd } from "../ui/Kbd";
 
@@ -10,7 +11,15 @@ const GROUP_LABEL: Record<CommandGroup, string> = {
   app: "App",
 };
 
-/** Ctrl+K: every available command, filtered by title, run with Enter or a click. */
+const LIST_ID = "palette-list";
+const optionId = (command: Command) => `palette-option-${command.id}`;
+
+/**
+ * Ctrl+K: every available command, filtered by title, run with Enter or a click.
+ * Focus stays on the input (a combobox over the listbox); the active option is
+ * announced through aria-activedescendant and scrolled into view. Focus returns
+ * to whatever had it before the palette opened.
+ */
 export function CommandPalette() {
   const open = useUi((state) => state.paletteOpen);
   const close = useUi((state) => state.closePalette);
@@ -22,14 +31,44 @@ export function CommandPalette() {
   // memo keyed on the query alone would show an empty list on first open.
   const needle = query.trim().toLowerCase();
   const items = listCommands().filter((command) => isAvailable(command) && (needle === "" || command.title.toLowerCase().includes(needle)));
+  const active = items[index];
+
+  useRestoreFocus(open);
 
   useEffect(() => {
     if (!open) return;
     setQuery("");
     setIndex(0);
-    const frame = requestAnimationFrame(() => input.current?.focus());
-    return () => cancelAnimationFrame(frame);
+    // Synchronous: the input is mounted by the time effects run, and a deferred
+    // focus would leave a frame in which keys still go to the opener.
+    input.current?.focus();
   }, [open]);
+
+  // Escape and Tab are claimed at the document while the palette is open, so
+  // they work wherever focus is. Stopping propagation keeps the app's own
+  // Escape (dismissing the overlay panel) from firing on the same key press.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        close();
+      } else if (event.key === "Tab") {
+        // The input is the palette's only stop; Tab never leaves the modal.
+        event.preventDefault();
+        event.stopPropagation();
+        input.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey, true);
+    return () => document.removeEventListener("keydown", onKey, true);
+  }, [open, close]);
+
+  const activeId = active ? optionId(active) : undefined;
+  useEffect(() => {
+    if (activeId) document.getElementById(activeId)?.scrollIntoView({ block: "nearest" });
+  }, [activeId]);
 
   if (!open) return null;
 
@@ -38,11 +77,8 @@ export function CommandPalette() {
     void command.run();
   };
 
-  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Escape") {
-      event.preventDefault();
-      close();
-    } else if (event.key === "ArrowDown") {
+  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "ArrowDown") {
       event.preventDefault();
       setIndex((current) => Math.min(current + 1, Math.max(items.length - 1, 0)));
     } else if (event.key === "ArrowUp") {
@@ -50,27 +86,38 @@ export function CommandPalette() {
       setIndex((current) => Math.max(current - 1, 0));
     } else if (event.key === "Enter") {
       event.preventDefault();
-      const command = items[index];
-      if (command) run(command);
+      if (active) run(active);
     }
   };
 
   return (
     <div className="palette-backdrop" onMouseDown={close} data-testid="command-palette">
-      <div className="palette" role="dialog" aria-modal="true" aria-label="Command palette" onMouseDown={(event) => event.stopPropagation()}>
+      <div
+        className="palette"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Command palette"
+        onMouseDown={(event) => event.stopPropagation()}
+        onKeyDown={onKeyDown}
+      >
         <input
           ref={input}
           className="palette-input"
           placeholder="Type a command"
           aria-label="Search commands"
+          role="combobox"
+          aria-expanded="true"
+          aria-controls={LIST_ID}
+          aria-autocomplete="list"
+          aria-activedescendant={activeId}
           value={query}
           onChange={(event) => { setQuery(event.target.value); setIndex(0); }}
-          onKeyDown={onKeyDown}
         />
-        <ul className="palette-list" role="listbox" aria-label="Commands">
+        <ul id={LIST_ID} className="palette-list" role="listbox" aria-label="Commands" tabIndex={-1}>
           {items.map((command, position) => (
             <li
               key={command.id}
+              id={optionId(command)}
               role="option"
               aria-selected={position === index}
               className={position === index ? "palette-item is-active" : "palette-item"}

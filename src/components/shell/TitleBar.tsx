@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { Copy, Minus, Plus, Square, X } from "lucide-react";
 import { isTauriHost } from "../../lib/ipc";
@@ -22,6 +22,12 @@ export function TitleBar() {
   const closeTab = useTabs((state) => state.closeTab);
   const newTab = useTabs((state) => state.newTab);
   const [maximized, setMaximized] = useState(false);
+  const scroller = useRef<HTMLDivElement>(null);
+
+  // Tabs scroll when they outnumber the strip; keep the active one in view.
+  useEffect(() => {
+    scroller.current?.querySelector(".tab.is-active")?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }, [activeId, tabs.length]);
 
   useEffect(() => {
     if (!isTauriHost()) return;
@@ -37,7 +43,17 @@ export function TitleBar() {
 
   return (
     <header className="titlebar" data-tauri-drag-region data-testid="titlebar">
-      <div className="titlebar-tabs" role="tablist" aria-label="Tabs">
+      <div className="titlebar-tabs">
+        <div
+          ref={scroller}
+          className="tab-scroller"
+          role="tablist"
+          aria-label="Tabs"
+          onWheel={(event) => {
+            // A vertical wheel scrolls the strip sideways, as in browsers.
+            if (event.deltaX === 0) event.currentTarget.scrollLeft += event.deltaY;
+          }}
+        >
         {tabs.map((tab) => {
           const title = tabTitle(tab);
           const active = tab.id === activeId;
@@ -47,6 +63,7 @@ export function TitleBar() {
               className={active ? "tab is-active" : "tab"}
               role="tab"
               aria-selected={active}
+              title={title}
               tabIndex={0}
               onClick={() => activate(tab.id)}
               onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") activate(tab.id); }}
@@ -65,6 +82,7 @@ export function TitleBar() {
             </div>
           );
         })}
+        </div>
         <IconButton label="New tab" onClick={() => newTab("home")} data-testid="tab-new">
           <Plus size={14} />
         </IconButton>
