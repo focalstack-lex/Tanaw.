@@ -19,7 +19,14 @@ const INVARIANTS = {
 };
 
 export default tseslint.config(
-  { ignores: ["dist/**", "node_modules/**", "src-tauri/**", "reports/**", "docs/**", ".scratch/**"] },
+  {
+    ignores: [
+      "dist/**", "node_modules/**", "src-tauri/**", "reports/**", "docs/**", ".scratch/**",
+      // Working copies and state of other agent tools (for example a Kilo Code
+      // git worktree under .kilo/worktrees) are separate checkouts, not this project.
+      ".kilo/**", ".claude/**", ".superpowers/**",
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {

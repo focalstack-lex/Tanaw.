@@ -31,6 +31,12 @@ rusqlite = { version = "0.40", features = ["bundled"] }
 thiserror = "2"
 log = "0.4"
 
+[target.'cfg(windows)'.dependencies]
+# A startup failure happens inside Tauri's setup, on the main thread, before the
+# renderer exists, so the only way to tell the user is a native Win32 message box.
+# Same version tao, tauri and wry already depend on, so it adds no new crate.
+windows = { version = "0.62", features = ["Win32_UI_WindowsAndMessaging"] }
+
 [dev-dependencies]
 tempfile = "3"
 

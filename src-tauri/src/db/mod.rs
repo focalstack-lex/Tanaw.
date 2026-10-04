@@ -2,7 +2,7 @@
 //! damaged file, and apply numbered migrations tracked by `user_version`.
 
 use std::path::{Path, PathBuf};
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use rusqlite::Connection;
 
@@ -62,11 +62,35 @@ fn configure(connection: &Connection) -> Result<(), TanawError> {
     Ok(())
 }
 
-/// Returns true when an existing file failed `integrity_check` and was moved
-/// aside, with its WAL and SHM siblings, so a fresh database can be created.
+/// How long the health probe waits for another connection's lock to clear.
+const PROBE_BUSY_TIMEOUT: Duration = Duration::from_secs(5);
+
+/// The health probe's verdict on an existing database file.
+#[derive(Debug, PartialEq, Eq)]
+pub(crate) enum Health {
+    Healthy,
+    /// SQLite says the file is corrupt or is not a database.
+    Damaged,
+    /// The file could not be checked (locked by another process, I/O failure).
+    /// It may be perfectly healthy, so it must never be moved aside.
+    Unavailable(String),
+}
+
+/// Returns true when an existing file was found damaged and moved aside, with
+/// its WAL and SHM siblings, so a fresh database can be created. A file that
+/// cannot be checked is reported as an error instead: quarantining a healthy
+/// database that was only locked would look to the user like lost data.
 fn quarantine_if_damaged(path: &Path) -> Result<bool, TanawError> {
-    if !path.exists() || is_healthy(path) {
+    if !path.exists() {
         return Ok(false);
+    }
+    match probe(path) {
+        Health::Healthy => return Ok(false),
+        Health::Unavailable(reason) => {
+            return Err(TanawError::db(format!("the database could not be checked: {reason}"))
+                .with_path(path.display().to_string()));
+        }
+        Health::Damaged => {}
     }
     let stamp = SystemTime::now()
         .duration_since(UNIX_EPOCH)
@@ -83,13 +107,29 @@ fn quarantine_if_damaged(path: &Path) -> Result<bool, TanawError> {
     Ok(true)
 }
 
-fn is_healthy(path: &Path) -> bool {
-    let Ok(connection) = Connection::open(path) else {
-        return false;
+fn probe(path: &Path) -> Health {
+    let connection = match Connection::open(path) {
+        Ok(connection) => connection,
+        Err(error) => return classify(&error),
     };
-    let verdict: Result<String, rusqlite::Error> =
-        connection.query_row("PRAGMA integrity_check", [], |row| row.get(0));
-    matches!(verdict.as_deref(), Ok("ok"))
+    if let Err(error) = connection.busy_timeout(PROBE_BUSY_TIMEOUT) {
+        return classify(&error);
+    }
+    match connection.query_row("PRAGMA integrity_check", [], |row| row.get::<_, String>(0)) {
+        Ok(verdict) if verdict == "ok" => Health::Healthy,
+        Ok(_) => Health::Damaged,
+        Err(error) => classify(&error),
+    }
+}
+
+/// Only SQLite's own corruption codes count as damage; everything else means
+/// the file could not be checked right now.
+pub(crate) fn classify(error: &rusqlite::Error) -> Health {
+    use rusqlite::ffi::ErrorCode;
+    match error.sqlite_error_code() {
+        Some(ErrorCode::DatabaseCorrupt | ErrorCode::NotADatabase) => Health::Damaged,
+        _ => Health::Unavailable(error.to_string()),
+    }
 }
 
 fn with_suffix(path: &Path, suffix: &str) -> PathBuf {

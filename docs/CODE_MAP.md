@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-02T14:00:11.928Z
-commit: 3fa1529
-fingerprint: 90a732eebaa9e2e0
+generated: 2026-10-04T15:59:54.168Z
+commit: be84e04
+fingerprint: 27965483d6756893
 -->
 # Code Map (Agent Navigation)
 
@@ -14,22 +14,23 @@ disagree, the code wins and the map is regenerated.
 
 ## Summary
 
-- Files indexed: 65
-- Total lines indexed: 4,488
+- Files indexed: 67
+- Total lines indexed: 4,690
 - Anchor index emitted for files over 300 lines: 3
 
 ### Areas
 
 | Area | Files | Lines |
 |---|---:|---:|
-| `.` | 4 | 85 |
+| `.` | 4 | 92 |
 | `eslint-rules` | 2 | 140 |
 | `scripts` | 4 | 812 |
 | `src` | 5 | 1,079 |
-| `src-tauri` | 2 | 56 |
-| `src-tauri/src` | 5 | 212 |
+| `src-tauri` | 2 | 62 |
+| `src-tauri/src` | 6 | 291 |
 | `src-tauri/src/data` | 3 | 215 |
-| `src-tauri/src/db` | 3 | 204 |
+| `src-tauri/src/db` | 3 | 284 |
+| `src-tauri/src/startup` | 1 | 30 |
 | `src/components/home` | 1 | 18 |
 | `src/components/palette` | 1 | 138 |
 | `src/components/settings` | 1 | 77 |
@@ -44,7 +45,7 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `eslint.config.js` | 50 | Eslint.Config |
+| `eslint.config.js` | 57 | Eslint.Config |
 | `vite.config.ts` | 20 | Vite.Config |
 | `index.html` | 14 | Index |
 | `o.html` | 1 | O |
@@ -79,7 +80,7 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `Cargo.toml` | 52 | Cargo |
+| `Cargo.toml` | 58 | Cargo |
 | `build.rs` | 4 | Build |
 
 ## src-tauri/src
@@ -87,7 +88,8 @@ disagree, the code wins and the map is regenerated.
 | File | Lines | Purpose |
 |---|---:|---|
 | `error.rs` | 94 | Error |
-| `lib.rs` | 56 | Lib |
+| `lib.rs` | 71 | Lib |
+| `startup.rs` | 64 | Startup |
 | `state.rs` | 31 | State |
 | `app.rs` | 24 | App |
 | `main.rs` | 7 | Main |
@@ -104,9 +106,15 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `mod.rs` | 98 | Mod |
-| `tests.rs` | 56 | Tests |
+| `mod.rs` | 138 | Mod |
+| `tests.rs` | 96 | Tests |
 | `migrations/0001_init.sql` | 50 | Init |
+
+## src-tauri/src/startup
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `tests.rs` | 30 | Tests |
 
 ## src/components/home
 

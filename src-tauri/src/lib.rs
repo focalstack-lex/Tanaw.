@@ -6,14 +6,17 @@ mod app;
 mod data;
 mod db;
 mod error;
+mod startup;
 mod state;
 
 pub use error::{ErrorCode, TanawError};
 
 use tauri::Manager;
 
-/// Builds and runs the application. Exits with status 1 instead of panicking
-/// when the shell cannot start, because release builds abort on panic.
+/// Builds and runs the application. When it cannot start (the shell fails to
+/// build, or the data folder or database cannot be opened), it logs the cause,
+/// tells the user (`startup::fail`) and exits with status 1 instead of panicking,
+/// because release builds abort on panic.
 pub fn run() {
     let log_level = if cfg!(debug_assertions) {
         log::LevelFilter::Debug
@@ -34,8 +37,20 @@ pub fn run() {
         )
         .plugin(tauri_plugin_window_state::Builder::default().build())
         .setup(|app| {
-            let data_dir = app.path().app_local_data_dir()?;
-            let opened = db::open(&data_dir)?;
+            // An Err returned from setup becomes a panic inside Tauri, and release
+            // builds abort on panic with no console: the window would flash and
+            // vanish with nothing logged. Startup failures are reported instead.
+            let data_dir = match app.path().app_local_data_dir() {
+                Ok(dir) => dir,
+                Err(error) => startup::fail(&startup::failure_message(
+                    None,
+                    &TanawError::new(ErrorCode::Io, error.to_string()),
+                )),
+            };
+            let opened = match db::open(&data_dir) {
+                Ok(opened) => opened,
+                Err(error) => startup::fail(&startup::failure_message(Some(&data_dir), &error)),
+            };
             if opened.recovered {
                 log::warn!("the database was damaged; a fresh one was created in {}", data_dir.display());
             }
