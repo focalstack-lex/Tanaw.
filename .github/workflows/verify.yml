@@ -83,13 +83,28 @@ jobs:
   native:
     name: Native crate (cargo test, clippy)
     runs-on: windows-latest
+    # The repository is named "Tanaw." and Windows strips a trailing period from
+    # folder names, so the default workspace D:\a\Tanaw.\Tanaw. cannot exist and
+    # actions/checkout fails. This job clones into a plain folder instead.
+    # Renaming the repository to "Tanaw" removes the need for this.
+    env:
+      SRC: D:\tanaw
+    defaults:
+      run:
+        working-directory: D:\tanaw
     steps:
-      - uses: actions/checkout@v4
+      - name: Clone the pushed commit into a Windows-safe folder
+        working-directory: ${{ runner.temp }}
+        shell: pwsh
+        run: |
+          git init $env:SRC
+          git -C $env:SRC remote add origin "https://github.com/${{ github.repository }}.git"
+          git -C $env:SRC fetch --depth 1 origin ${{ github.sha }}
+          git -C $env:SRC checkout --detach FETCH_HEAD
 
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
-          cache: npm
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -99,7 +114,7 @@ jobs:
       - name: Cache Rust build
         uses: Swatinem/rust-cache@v2
         with:
-          workspaces: src-tauri
+          workspaces: D:\tanaw\src-tauri
 
       - name: Install dependencies
         run: npm ci
@@ -108,9 +123,9 @@ jobs:
         run: npm run build
 
       - name: Native tests
-        working-directory: src-tauri
+        working-directory: D:\tanaw\src-tauri
         run: cargo test --locked
 
       - name: Clippy with warnings denied
-        working-directory: src-tauri
+        working-directory: D:\tanaw\src-tauri
         run: cargo clippy --all-targets --locked -- -D warnings
