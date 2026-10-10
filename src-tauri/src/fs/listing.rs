@@ -80,6 +80,10 @@ impl Default for Sort {
 }
 
 pub fn list(path: &Path, show_hidden: bool, sort: Sort) -> Result<DirListing, FilewellError> {
+    list_capped(path, show_hidden, sort, LISTING_CAP)
+}
+
+pub(crate) fn list_capped(path: &Path, show_hidden: bool, sort: Sort, cap: usize) -> Result<DirListing, FilewellError> {
     let display = path.display().to_string();
     let meta = std::fs::metadata(path).map_err(|error| FilewellError::from(error).with_path(display.as_str()))?;
     if !meta.is_dir() {
@@ -112,7 +116,7 @@ pub fn list(path: &Path, show_hidden: bool, sort: Sort) -> Result<DirListing, Fi
             }
         }
     }
-    Ok(assemble(display, entries, skipped, sort, LISTING_CAP))
+    Ok(assemble(display, entries, skipped, sort, cap))
 }
 
 pub fn stat_entry(path: &Path) -> Result<Entry, FilewellError> {

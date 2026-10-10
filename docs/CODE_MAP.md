@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-10T03:04:29.517Z
-commit: 0c6fb47
-fingerprint: 0d87f95d0d48003a
+generated: 2026-10-10T03:10:30.421Z
+commit: 484ef25
+fingerprint: 426f3dccb1f4f1d0
 -->
 # Code Map (Agent Navigation)
 
@@ -15,7 +15,7 @@ disagree, the code wins and the map is regenerated.
 ## Summary
 
 - Files indexed: 74
-- Total lines indexed: 5,187
+- Total lines indexed: 5,240
 - Anchor index emitted for files over 300 lines: 3
 
 ### Areas
@@ -30,7 +30,7 @@ disagree, the code wins and the map is regenerated.
 | `src-tauri/src` | 7 | 330 |
 | `src-tauri/src/data` | 3 | 215 |
 | `src-tauri/src/db` | 3 | 284 |
-| `src-tauri/src/fs` | 5 | 420 |
+| `src-tauri/src/fs` | 5 | 473 |
 | `src-tauri/src/paths` | 1 | 38 |
 | `src-tauri/src/startup` | 1 | 30 |
 | `src/components/home` | 1 | 18 |
@@ -117,8 +117,8 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `listing.rs` | 207 | Listing |
-| `listing/tests.rs` | 110 | Tests |
+| `listing.rs` | 211 | Listing |
+| `listing/tests.rs` | 159 | Tests |
 | `sort.rs` | 55 | Sort |
 | `sort/tests.rs` | 30 | Tests |
 | `mod.rs` | 18 | Mod |

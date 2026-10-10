@@ -107,3 +107,52 @@ fn ten_thousand_entries_list_in_under_150_ms() {
     assert_eq!(listing.total, 10_000);
     assert!(elapsed.as_millis() < 150, "listing took {elapsed:?}");
 }
+
+#[test]
+fn list_applies_the_cap_it_is_given() {
+    let dir = fixture();
+    let listing = list_capped(dir.path(), true, Sort::default(), 2).unwrap();
+    assert_eq!(listing.entries.len(), 2);
+    assert_eq!(listing.total, 6);
+    assert!(listing.truncated);
+}
+
+#[test]
+fn list_uses_the_public_cap() {
+    assert_eq!(LISTING_CAP, 50_000);
+    let dir = fixture();
+    assert!(!list(dir.path(), true, Sort::default()).unwrap().truncated);
+}
+
+#[test]
+fn dollar_names_are_hidden_only_at_a_drive_root() {
+    let dir = fixture();
+    let path = dir.path().join("$Recycle");
+    fs::write(&path, b"x").unwrap();
+    let meta = fs::symlink_metadata(&path).unwrap();
+    assert!(build_entry("$Recycle".into(), &path, meta.clone(), true).hidden);
+    assert!(!build_entry("$Recycle".into(), &path, meta, false).hidden);
+}
+
+#[cfg(windows)]
+fn junction(link: &std::path::Path, target: &std::path::Path) {
+    let status = std::process::Command::new("cmd").arg("/C").arg("mklink").arg("/J").arg(link).arg(target).status().unwrap();
+    assert!(status.success());
+}
+
+#[cfg(windows)]
+#[test]
+fn a_junction_is_a_link_to_a_folder_and_a_broken_one_still_lists() {
+    let dir = fixture();
+    let target = dir.path().join("target-folder");
+    fs::create_dir(&target).unwrap();
+    let link = dir.path().join("jct");
+    junction(&link, &target);
+    let entry = list(dir.path(), true, Sort::default()).unwrap().entries.into_iter().find(|e| e.name == "jct").unwrap();
+    assert_eq!((entry.kind, entry.is_link), (EntryKind::Dir, true));
+    fs::remove_dir(&target).unwrap();
+    let broken = list(dir.path(), true, Sort::default()).unwrap().entries.into_iter().find(|e| e.name == "jct");
+    let broken = broken.expect("a broken junction must still list");
+    assert!(broken.is_link);
+    assert_eq!(broken.kind, EntryKind::File);
+}
