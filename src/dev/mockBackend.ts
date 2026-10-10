@@ -27,7 +27,7 @@ const HANDLERS: Record<string, Handler> = {
   },
   get_app_info: (): AppInfo => ({
     version: "0.1.0-dev",
-    dataDir: "C:/Users/dev/AppData/Local/com.focalstack.tanaw",
+    dataDir: "C:/Users/dev/AppData/Local/com.focalstack.filewell",
     databaseRecovered: false,
   }),
   // Window plugin calls from the custom title bar: no window to move in a browser.
@@ -40,7 +40,7 @@ const HANDLERS: Record<string, Handler> = {
 
 export function installMockBackend(): void {
   if ("__TAURI_INTERNALS__" in window) return;
-  console.info("[tanaw] Running with the dev mock backend (no Tauri host detected).");
+  console.info("[filewell] Running with the dev mock backend (no Tauri host detected).");
 
   let callbackId = 0;
   const internals = {
@@ -71,7 +71,7 @@ export function installMockBackend(): void {
       if (cmd.startsWith("plugin:event|")) return Promise.resolve(callbackId);
       const handler = HANDLERS[cmd];
       if (!handler) {
-        return Promise.reject(new Error(`[tanaw dev mock] Unhandled IPC command: ${cmd}`));
+        return Promise.reject(new Error(`[filewell dev mock] Unhandled IPC command: ${cmd}`));
       }
       return Promise.resolve().then(() => handler(args));
     },

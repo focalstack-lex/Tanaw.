@@ -1,4 +1,4 @@
-//! Tanaw native core. Every side effect (database, filesystem, shell) lives
+//! Filewell native core. Every side effect (database, filesystem, shell) lives
 //! here behind `#[tauri::command]` functions that validate their input; the
 //! renderer only displays what these commands return.
 
@@ -9,7 +9,7 @@ mod error;
 mod startup;
 mod state;
 
-pub use error::{ErrorCode, TanawError};
+pub use error::{ErrorCode, FilewellError};
 
 use tauri::Manager;
 
@@ -28,7 +28,7 @@ pub fn run() {
         .plugin(
             tauri_plugin_log::Builder::new()
                 .targets([tauri_plugin_log::Target::new(
-                    tauri_plugin_log::TargetKind::LogDir { file_name: Some("tanaw".into()) },
+                    tauri_plugin_log::TargetKind::LogDir { file_name: Some("filewell".into()) },
                 )])
                 .level(log_level)
                 .max_file_size(5 * 1024 * 1024)
@@ -44,7 +44,7 @@ pub fn run() {
                 Ok(dir) => dir,
                 Err(error) => startup::fail(&startup::failure_message(
                     None,
-                    &TanawError::new(ErrorCode::Io, error.to_string()),
+                    &FilewellError::new(ErrorCode::Io, error.to_string()),
                 )),
             };
             let opened = match db::open(&data_dir) {
@@ -64,7 +64,7 @@ pub fn run() {
         ]);
 
     if let Err(error) = builder.run(tauri::generate_context!()) {
-        log::error!("Tanaw could not start: {error}");
+        log::error!("Filewell could not start: {error}");
         std::process::exit(1);
     }
 }

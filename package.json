@@ -1,8 +1,8 @@
 {
-  "name": "tanaw",
+  "name": "filewell",
   "private": true,
   "version": "0.1.0",
-  "description": "Tanaw: a calm, focused file manager for Windows, with notes and to-dos beside your files.",
+  "description": "Filewell: a calm, focused file manager for Windows, with notes and to-dos beside your files.",
   "license": "MIT",
   "type": "module",
   "scripts": {

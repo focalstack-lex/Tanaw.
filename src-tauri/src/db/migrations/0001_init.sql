@@ -1,4 +1,4 @@
--- Tanaw schema, version 1 (spec 5.9). Ids are UUID v4 strings so backups
+-- Filewell schema, version 1 (spec 5.9). Ids are UUID v4 strings so backups
 -- merge across machines; timestamps are Unix milliseconds; due_date is an
 -- ISO calendar date.
 CREATE TABLE settings (

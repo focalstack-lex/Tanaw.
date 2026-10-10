@@ -1,4 +1,4 @@
-# Tanaw Feature Map (agent-facing)
+# Filewell Feature Map (agent-facing)
 
 What every surface is, how a user reaches it, how the UI drive reaches it, and which IPC
 commands sit under it. Update this file in the same change as any interface change; when it
@@ -73,7 +73,7 @@ Every page load, and the end of each browser context, fails the run if a `.toast
 
 - The dev harness (`src/dev/mockBackend.ts`) runs only when `import.meta.env.DEV` is true and no Tauri host is present. Never mask a feature to make a drive pass.
 - `dragDropEnabled: true` (needed for drops from Explorer) disables HTML5 drag and drop inside the webview on Windows; internal drags use pointer events.
-- Custom URI schemes are served as `http://tanaw.localhost` on Windows; the CSP lists that origin.
+- Custom URI schemes are served as `http://filewell.localhost` on Windows; the CSP lists that origin.
 - Vite dev needs the inline React refresh preamble, so `devCsp` allows inline scripts; the release `csp` does not.
 - WebView2 keeps the browser's page menu and accelerators (reload, print, find, view source, back and forward) unless the page claims them, and Tauri has no window option for it. `src/lib/browserGuard.ts`, installed in `src/main.tsx`, prevents their default action; it never stops propagation, so the app can still bind F5 and Ctrl+F as commands. Text fields keep the native cut, copy and paste menu.
 - WebView2 ignores `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS` when the app passes its own browser arguments. To drive the real native webview, add `--remote-debugging-port` through a `tauri dev --config` override with `additionalBrowserArgs`, then use Playwright `connectOverCDP`.

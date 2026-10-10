@@ -6,12 +6,12 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use rusqlite::Connection;
 
-use crate::error::TanawError;
+use crate::error::FilewellError;
 
 #[cfg(test)]
 mod tests;
 
-pub const DB_FILE: &str = "tanaw.db";
+pub const DB_FILE: &str = "filewell.db";
 
 /// Forward-only migrations. Index 0 brings `user_version` to 1, and so on.
 const MIGRATIONS: &[&str] = &[include_str!("migrations/0001_init.sql")];
@@ -22,7 +22,7 @@ pub struct Opened {
     pub recovered: bool,
 }
 
-pub fn open(data_dir: &Path) -> Result<Opened, TanawError> {
+pub fn open(data_dir: &Path) -> Result<Opened, FilewellError> {
     std::fs::create_dir_all(data_dir)?;
     let path = data_dir.join(DB_FILE);
     let recovered = quarantine_if_damaged(&path)?;
@@ -32,18 +32,18 @@ pub fn open(data_dir: &Path) -> Result<Opened, TanawError> {
     Ok(Opened { connection, recovered })
 }
 
-pub fn schema_version(connection: &Connection) -> Result<u32, TanawError> {
+pub fn schema_version(connection: &Connection) -> Result<u32, FilewellError> {
     Ok(connection.query_row("PRAGMA user_version", [], |row| row.get::<_, u32>(0))?)
 }
 
 /// Applies every migration above the current `user_version`, each in its own
 /// transaction, and returns how many ran.
-pub fn migrate(connection: &Connection) -> Result<usize, TanawError> {
+pub fn migrate(connection: &Connection) -> Result<usize, FilewellError> {
     let current = schema_version(connection)? as usize;
     let mut applied = 0;
     for (index, sql) in MIGRATIONS.iter().enumerate().skip(current) {
         let next = u32::try_from(index + 1)
-            .map_err(|_| TanawError::db("too many migrations for a 32-bit user_version"))?;
+            .map_err(|_| FilewellError::db("too many migrations for a 32-bit user_version"))?;
         let transaction = connection.unchecked_transaction()?;
         transaction.execute_batch(sql)?;
         transaction.pragma_update(None, "user_version", next)?;
@@ -53,7 +53,7 @@ pub fn migrate(connection: &Connection) -> Result<usize, TanawError> {
     Ok(applied)
 }
 
-fn configure(connection: &Connection) -> Result<(), TanawError> {
+fn configure(connection: &Connection) -> Result<(), FilewellError> {
     // journal_mode answers with the resulting mode as a row, so it is queried.
     connection.query_row("PRAGMA journal_mode = WAL", [], |_| Ok(()))?;
     connection.execute_batch(
@@ -80,14 +80,14 @@ pub(crate) enum Health {
 /// its WAL and SHM siblings, so a fresh database can be created. A file that
 /// cannot be checked is reported as an error instead: quarantining a healthy
 /// database that was only locked would look to the user like lost data.
-fn quarantine_if_damaged(path: &Path) -> Result<bool, TanawError> {
+fn quarantine_if_damaged(path: &Path) -> Result<bool, FilewellError> {
     if !path.exists() {
         return Ok(false);
     }
     match probe(path) {
         Health::Healthy => return Ok(false),
         Health::Unavailable(reason) => {
-            return Err(TanawError::db(format!("the database could not be checked: {reason}"))
+            return Err(FilewellError::db(format!("the database could not be checked: {reason}"))
                 .with_path(path.display().to_string()));
         }
         Health::Damaged => {}

@@ -2,7 +2,7 @@ import { useEffect, type CSSProperties } from "react";
 import { ensureAppCommands } from "./lib/appCommands";
 import { commandForKey } from "./lib/commands";
 import { describeError } from "./lib/errors";
-import { ipc, toTanawError } from "./lib/ipc";
+import { ipc, toFilewellError } from "./lib/ipc";
 import { OVERLAY_QUERY, usePanel } from "./store/panel";
 import { useSettings } from "./store/settings";
 import { activeTab, useTabs } from "./store/tabs";
@@ -29,7 +29,7 @@ export default function App() {
     ensureAppCommands();
     void load();
     ipc.getAppInfo().then(setAppInfo).catch((raw: unknown) => {
-      const { title, detail } = describeError(toTanawError(raw));
+      const { title, detail } = describeError(toFilewellError(raw));
       useUi.getState().toast("error", title, detail);
     });
   }, [load, setAppInfo]);

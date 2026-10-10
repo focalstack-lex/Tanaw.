@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use tauri::State;
 
-use crate::error::TanawError;
+use crate::error::FilewellError;
 use crate::state::AppState;
 
 #[cfg(test)]
@@ -66,7 +66,7 @@ impl Default for Settings {
 pub const PANEL_WIDTH: (u32, u32) = (200, 800);
 pub const SIDEBAR_WIDTH: (u32, u32) = (160, 480);
 
-pub fn load(connection: &Connection) -> Result<Settings, TanawError> {
+pub fn load(connection: &Connection) -> Result<Settings, FilewellError> {
     let mut settings = Settings::default();
     let mut statement = connection.prepare("SELECT key, value FROM settings")?;
     let rows = statement.query_map([], |row| Ok((row.get::<_, String>(0)?, row.get::<_, String>(1)?)))?;
@@ -87,7 +87,7 @@ pub fn load(connection: &Connection) -> Result<Settings, TanawError> {
 }
 
 /// Validates one key against the current settings, then persists it as JSON.
-pub fn store(connection: &Connection, key: &str, value: &Value) -> Result<Settings, TanawError> {
+pub fn store(connection: &Connection, key: &str, value: &Value) -> Result<Settings, FilewellError> {
     let mut settings = load(connection)?;
     apply(&mut settings, key, value)?;
     connection.execute(
@@ -98,7 +98,7 @@ pub fn store(connection: &Connection, key: &str, value: &Value) -> Result<Settin
     Ok(settings)
 }
 
-fn apply(settings: &mut Settings, key: &str, value: &Value) -> Result<(), TanawError> {
+fn apply(settings: &mut Settings, key: &str, value: &Value) -> Result<(), FilewellError> {
     match key {
         "theme" => settings.theme = parse(key, value)?,
         "showHidden" => settings.show_hidden = parse(key, value)?,
@@ -107,20 +107,20 @@ fn apply(settings: &mut Settings, key: &str, value: &Value) -> Result<(), TanawE
         "panelWidth" => settings.panel_width = bounded(key, value, PANEL_WIDTH)?,
         "panelTab" => settings.panel_tab = parse(key, value)?,
         "sidebarWidth" => settings.sidebar_width = bounded(key, value, SIDEBAR_WIDTH)?,
-        _ => return Err(TanawError::validation(format!("{key} is not a setting"))),
+        _ => return Err(FilewellError::validation(format!("{key} is not a setting"))),
     }
     Ok(())
 }
 
-fn parse<T: serde::de::DeserializeOwned>(key: &str, value: &Value) -> Result<T, TanawError> {
+fn parse<T: serde::de::DeserializeOwned>(key: &str, value: &Value) -> Result<T, FilewellError> {
     serde_json::from_value(value.clone())
-        .map_err(|error| TanawError::validation(format!("{key} does not accept {value}: {error}")))
+        .map_err(|error| FilewellError::validation(format!("{key} does not accept {value}: {error}")))
 }
 
-fn bounded(key: &str, value: &Value, (min, max): (u32, u32)) -> Result<u32, TanawError> {
+fn bounded(key: &str, value: &Value, (min, max): (u32, u32)) -> Result<u32, FilewellError> {
     let number: u32 = parse(key, value)?;
     if number < min || number > max {
-        return Err(TanawError::validation(format!(
+        return Err(FilewellError::validation(format!(
             "{key} must be between {min} and {max}, not {number}"
         )));
     }
@@ -128,13 +128,13 @@ fn bounded(key: &str, value: &Value, (min, max): (u32, u32)) -> Result<u32, Tana
 }
 
 #[tauri::command]
-pub fn get_settings(state: State<'_, AppState>) -> Result<Settings, TanawError> {
+pub fn get_settings(state: State<'_, AppState>) -> Result<Settings, FilewellError> {
     let db = state.db()?;
     load(&db)
 }
 
 #[tauri::command]
-pub fn set_setting(state: State<'_, AppState>, key: String, value: Value) -> Result<Settings, TanawError> {
+pub fn set_setting(state: State<'_, AppState>, key: String, value: Value) -> Result<Settings, FilewellError> {
     let db = state.db()?;
     store(&db, &key, &value)
 }

@@ -3,7 +3,7 @@
 A calm, focused file manager for Windows, with notes and to-dos beside your files.
 Free and open source under the MIT license.
 
-Tanaw is being built in five pieces (see `docs/superpowers/specs/2026-10-02-tanaw-v1-design.md`).
+Filewell is being built in five pieces (see `docs/superpowers/specs/2026-10-02-filewell-v1-design.md`).
 Piece 1, the foundation, is what this repository holds today: the native shell, tabs, themes,
 settings, the command palette and the verification gate.
 

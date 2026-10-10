@@ -36,7 +36,7 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
-      - name: Lint (Tanaw invariants and correctness)
+      - name: Lint (Filewell invariants and correctness)
         run: npm run lint
 
       - name: Text invariants in every tracked file
@@ -83,15 +83,16 @@ jobs:
   native:
     name: Native crate (cargo test, clippy)
     runs-on: windows-latest
-    # The repository is named "Tanaw." and Windows strips a trailing period from
-    # folder names, so the default workspace D:\a\Tanaw.\Tanaw. cannot exist and
-    # actions/checkout fails. This job clones into a plain folder instead.
-    # Renaming the repository to "Tanaw" removes the need for this.
+    # The GitHub repository is still named "Tanaw." (the product's former name) and
+    # Windows strips a trailing period from folder names, so the default workspace
+    # D:\a\Tanaw.\Tanaw. cannot exist and actions/checkout fails. This job clones
+    # into a plain folder instead. Once the repository is renamed to "Filewell",
+    # this job can go back to actions/checkout.
     env:
-      SRC: D:\tanaw
+      SRC: D:\filewell
     defaults:
       run:
-        working-directory: D:\tanaw
+        working-directory: D:\filewell
     steps:
       - name: Clone the pushed commit into a Windows-safe folder
         working-directory: ${{ runner.temp }}
@@ -114,7 +115,7 @@ jobs:
       - name: Cache Rust build
         uses: Swatinem/rust-cache@v2
         with:
-          workspaces: D:\tanaw\src-tauri
+          workspaces: D:\filewell\src-tauri
 
       - name: Install dependencies
         run: npm ci
@@ -123,9 +124,9 @@ jobs:
         run: npm run build
 
       - name: Native tests
-        working-directory: D:\tanaw\src-tauri
+        working-directory: D:\filewell\src-tauri
         run: cargo test --locked
 
       - name: Clippy with warnings denied
-        working-directory: D:\tanaw\src-tauri
+        working-directory: D:\filewell\src-tauri
         run: cargo clippy --all-targets --locked -- -D warnings

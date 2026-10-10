@@ -2,20 +2,20 @@ import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
-import tanaw from "./eslint-rules/tanaw-invariants.js";
+import filewell from "./eslint-rules/filewell-invariants.js";
 
 /**
- * Tanaw ESLint gate.
+ * Filewell ESLint gate.
  *
  * Narrow on purpose: the four directive invariants (zero emoji, zero em or en
  * dash, no silent catch, no committed secret) plus TypeScript and hooks
  * correctness. No style preferences, so it never forces a structural rewrite.
  */
 const INVARIANTS = {
-  "tanaw/no-emoji": "error",
-  "tanaw/no-dash-punctuation": "error",
-  "tanaw/no-silent-catch": "error",
-  "tanaw/no-hardcoded-secret": "error",
+  "filewell/no-emoji": "error",
+  "filewell/no-dash-punctuation": "error",
+  "filewell/no-silent-catch": "error",
+  "filewell/no-hardcoded-secret": "error",
 };
 
 export default tseslint.config(
@@ -31,7 +31,7 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   {
     files: ["**/*.{js,mjs,ts,tsx}"],
-    plugins: { tanaw },
+    plugins: { filewell },
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module",

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Tanaw UI verification drive.
+ * Filewell UI verification drive.
  *
  * Starts the Vite dev server, which activates the mocked-IPC harness in a plain
  * browser (src/main.tsx), then drives the renderer with Playwright the way a

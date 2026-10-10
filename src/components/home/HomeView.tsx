@@ -7,7 +7,7 @@ export function HomeView() {
     <section className="view" data-testid="home-view">
       {info?.databaseRecovered && (
         <div className="notice" role="status">
-          The Tanaw database was damaged and has been reset. The damaged file was kept beside it.
+          The Filewell database was damaged and has been reset. The damaged file was kept beside it.
         </div>
       )}
       <h1 className="view-title">Home</h1>

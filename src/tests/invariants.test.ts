@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Linter } from "eslint";
-import tanaw from "../../eslint-rules/tanaw-invariants.js";
+import filewell from "../../eslint-rules/filewell-invariants.js";
 
 // Each sample is assembled at runtime so this test file itself stays clean
 // under the very rules it exercises.
@@ -10,15 +10,15 @@ function ruleIds(code: string, rule: string): string[] {
   return linter
     .verify(
       code,
-      [{ files: ["**/*.js"], plugins: { tanaw }, rules: { [`tanaw/${rule}`]: "error" } }],
+      [{ files: ["**/*.js"], plugins: { filewell }, rules: { [`filewell/${rule}`]: "error" } }],
       { filename: "sample.js" },
     )
     .map((message) => message.ruleId ?? "");
 }
 
-describe("tanaw invariant rules", () => {
+describe("filewell invariant rules", () => {
   it("flags an emoji character", () => {
-    expect(ruleIds(`const s = "${String.fromCodePoint(0x1f600)}";`, "no-emoji")).toEqual(["tanaw/no-emoji"]);
+    expect(ruleIds(`const s = "${String.fromCodePoint(0x1f600)}";`, "no-emoji")).toEqual(["filewell/no-emoji"]);
   });
 
   it("accepts the legal typographic symbols", () => {
@@ -37,6 +37,6 @@ describe("tanaw invariant rules", () => {
 
   it("flags a committed token pattern", () => {
     const token = "ghp_" + "a".repeat(30);
-    expect(ruleIds(`const k = "${token}";`, "no-hardcoded-secret")).toEqual(["tanaw/no-hardcoded-secret"]);
+    expect(ruleIds(`const k = "${token}";`, "no-hardcoded-secret")).toEqual(["filewell/no-hardcoded-secret"]);
   });
 });

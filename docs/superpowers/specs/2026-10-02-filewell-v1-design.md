@@ -1,8 +1,8 @@
-# Tanaw v1: Design Specification
+# Filewell v1: Design Specification
 
-**Product**: Tanaw (Tagalog: "view")
+**Product**: Filewell (renamed from Tanaw on 2026-10-10, see the decision log)
 **One line**: A calm, focused file manager for Windows, with notes and to-dos beside your files.
-**Owner**: Lex Matondo, published free and open source under MIT at `github.com/focalstack-lex/Tanaw.`
+**Owner**: Lex Matondo, published free and open source under MIT at `github.com/focalstack-lex/Filewell`
 **Platform**: Windows 10 and 11 (x64), Tauri 2, Rust core, React and TypeScript renderer.
 **Status**: Design approved in brainstorming on 2026-10-02; implementation plans follow per piece.
 
@@ -15,7 +15,7 @@ derive from this file; when the two disagree, this file is corrected first.
 
 ## 1. Positioning
 
-Windows Explorer is noisy: ribbons, ads for cloud storage, mixed metaphors. Tanaw is the quiet
+Windows Explorer is noisy: ribbons, ads for cloud storage, mixed metaphors. Filewell is the quiet
 alternative for students and creatives: one clear frame, fast listing, predictable file
 operations that can always be undone, and a side panel where notes and to-dos live next to
 the folder being worked in. It runs locally only, has no accounts, sends no telemetry, and
@@ -46,10 +46,10 @@ decision deferred to its own design phase.
 | Conflicts | Ask with Replace, Keep both, Skip, and apply-to-all | Always keep both, side-by-side compare |
 | Windows integration | Drag in from Explorer, open in default app, Open with | Native shell context menu, Explorer hooks, drag out |
 | Recovery | Note version history | Session restore, interrupted operations, database backups |
-| Export and import | Single `.tanaw` backup file, merge or replace | Markdown export, plain JSON |
+| Export and import | Single `.filewell` backup file, merge or replace | Markdown export, plain JSON |
 | Shortcuts | Explorer defaults plus Ctrl+K command palette, fixed bindings | Rebinding, no palette |
 | Updates | Check GitHub Releases, user confirms install, signed | Silent auto-update, manual only |
-| Name | Tanaw, repository `focalstack-lex/Tanaw.` (trailing period is part of the name) | Linaw, Kalma |
+| Name | Filewell, repository `focalstack-lex/Filewell`. Renamed from Tanaw on 2026-10-10: "Tanaw" is used by a tourism platform, and the repository name `Tanaw.` (trailing period) cannot be checked out on Windows runners. Web search found only a small unrelated business app and a for-sale domain using the name; the trademark check is still owed before release | Tanaw, Silip, Linaw, Banaag, Stillroom, Plainview, Lull, Kept, Shelfwise |
 | Architecture | Approach A: Rust does the work, the renderer displays it | Tauri fs plugin from the renderer, hybrid |
 | Reference | Dashboard frame from the Explo mockup, stripped of cloud, sharing and upsell parts | |
 
@@ -72,16 +72,16 @@ show progress with Cancel and never block the window; window size and position a
 | Side panel | Tabs: Preview (images), Notes, To-dos; a reserved slot for Assistant |
 | Notes | Live-rendered Markdown editor, auto-save, version history with restore, soft delete with a Deleted list and restore |
 | To-dos | Title, done, optional due date, overdue marking, drag to reorder |
-| App | Settings, light, dark or system theme, Explorer shortcuts, Ctrl+K palette, `.tanaw` export and import (merge or replace), update check with confirm |
+| App | Settings, light, dark or system theme, Explorer shortcuts, Ctrl+K palette, `.filewell` export and import (merge or replace), update check with confirm |
 | Distribution | NSIS installer (per user, no admin prompt), signed updater manifest on GitHub Releases, Windows code signing through SignPath's open-source program |
 
 ### Out of v1, on purpose
 
 LLM assistant (next release), whole-drive index, split view, native Windows shell context
-menu, Explorer "Open in Tanaw" hook, dragging files out to other apps, previews for PDF, text,
+menu, Explorer "Open in Filewell" hook, dragging files out to other apps, previews for PDF, text,
 audio and video, reminders, multiple to-do lists, shortcut rebinding, session restore,
 interrupted-operation resume, database backups, Markdown export of notes, a deep folder tree
-in the sidebar, emptying the Recycle Bin from inside Tanaw, redo, macOS and Linux.
+in the sidebar, emptying the Recycle Bin from inside Filewell, redo, macOS and Linux.
 
 ### Done criteria
 
@@ -109,7 +109,7 @@ in the sidebar, emptying the Recycle Bin from inside Tanaw, redo, macOS and Linu
 +------------------------------v--------------------------------+
 | Rust core (src-tauri): every command validates, then acts      |
 |   paths.rs  fs/  shell.rs  db/  data/  backup.rs  updater.rs   |
-|   custom protocol tanaw:// serves files and thumbnails         |
+|   custom protocol filewell:// serves files and thumbnails         |
 +------------------------------+--------------------------------+
                                | std::fs, trash, notify, rusqlite
 +------------------------------v--------------------------------+
@@ -136,7 +136,7 @@ Rules that follow from approach A:
   Explorer), HTML5 drag-and-drop inside the webview does not work on Windows. Internal drags
   (file onto a sidebar folder, to-do reorder, favorites reorder) therefore use pointer events
   through one `useDrag` hook, not the HTML5 API.
-- Custom URI schemes are served on Windows as `http://tanaw.localhost/...`. The CSP image
+- Custom URI schemes are served on Windows as `http://filewell.localhost/...`. The CSP image
   source list includes that origin.
 - Release builds run with `panic = "abort"`. Command code must not panic: `clippy::unwrap_used`,
   `clippy::expect_used` and `clippy::panic` are denied in `Cargo.toml` lints.
@@ -149,7 +149,7 @@ Rules that follow from approach A:
 The app lives at the repository root (single application, no `desktop/` subfolder).
 
 ```
-Tanaw/
+Filewell/
   .github/workflows/verify.yml       gate: frontend, ui drive, native (Windows), code map
   .github/workflows/release.yml      tag v* -> NSIS installer + latest.json (added in piece 5)
   docs/CODE_MAP.md                   generated agent navigation map (never hand-edited)
@@ -160,7 +160,7 @@ Tanaw/
   reports/ui-verification/           drive evidence (gitignored)
   scripts/generate-code-map.mjs      dependency-free, extended for .ts .tsx .rs
   scripts/verify-ui.mjs              Playwright drive of the mocked renderer
-  eslint-rules/tanaw-invariants.js   no-emoji, no-dash-punctuation, no-silent-catch, no-hardcoded-secret
+  eslint-rules/filewell-invariants.js   no-emoji, no-dash-punctuation, no-silent-catch, no-hardcoded-secret
   src/                               renderer (section 7)
   src-tauri/                         Rust core (section 5)
   index.html  vite.config.ts  tsconfig.json  eslint.config.js  package.json
@@ -175,9 +175,9 @@ Tanaw/
 
 | File | Responsibility |
 | --- | --- |
-| `main.rs` | Entry point, calls `tanaw_lib::run()` |
-| `lib.rs` | Builder: plugins, managed state, command list, `tanaw` protocol registration, startup checks |
-| `error.rs` | `TanawError { code, message, path }` and `ErrorCode`; `From` impls for io, rusqlite, trash, zip |
+| `main.rs` | Entry point, calls `filewell_lib::run()` |
+| `lib.rs` | Builder: plugins, managed state, command list, `filewell` protocol registration, startup checks |
+| `error.rs` | `FilewellError { code, message, path }` and `ErrorCode`; `From` impls for io, rusqlite, trash, zip |
 | `paths.rs` | Path and name validation (5.2) |
 | `state.rs` | `AppState`: database connection behind a mutex, operation registry, undo stack, search registry, watcher registry |
 | `fs/mod.rs` | `list_dir`, `stat`, natural sort |
@@ -191,7 +191,7 @@ Tanaw/
 | `db/mod.rs` | Open, pragmas, integrity check, migration runner |
 | `db/migrations/0001_init.sql` | Schema (5.9) |
 | `data/settings.rs` `favorites.rs` `recent.rs` `notes.rs` `todos.rs` | Thin command modules over the database |
-| `backup.rs` | Export, inspect and import of `.tanaw` files |
+| `backup.rs` | Export, inspect and import of `.filewell` files |
 | `updater.rs` | Check and install wrappers around the updater plugin |
 
 ### 5.2 Path and name validation (`paths.rs`)
@@ -203,7 +203,7 @@ message that names the rule broken.
 Path rules: must be absolute; no NUL byte; no `..` component after normalization; must
 canonicalize when it is expected to exist; length under 32,000 characters (long-path aware:
 the core adds the Windows extended-length prefix where needed). Protected targets refuse
-rename, move, copy-over and delete: any drive root, `%WINDIR%`, and the Tanaw data directory.
+rename, move, copy-over and delete: any drive root, `%WINDIR%`, and the Filewell data directory.
 Everything else is governed by Windows ACLs; a refusal from Windows is surfaced, never retried
 with elevation.
 
@@ -279,12 +279,12 @@ the previous one. Results are capped at 5,000 with a notice.
 - `watch_dir(tabId, path)` installs a `notify` watcher (non-recursive) and emits
   `dir-changed { path }` debounced at 300 ms; the tab refetches its listing. `unwatch(tabId)`
   on tab close or navigation.
-- Thumbnails: `tanaw://localhost/thumb/<percent-encoded path>` decodes PNG, JPEG, GIF, WebP
+- Thumbnails: `filewell://localhost/thumb/<percent-encoded path>` decodes PNG, JPEG, GIF, WebP
   through the `image` crate, resizes to 160 px on the long side, encodes JPEG quality 80 into
-  `%LOCALAPPDATA%/com.focalstack.tanaw/thumbs/<hash>.jpg` keyed by path, size and mtime, and
+  `%LOCALAPPDATA%/com.focalstack.filewell/thumbs/<hash>.jpg` keyed by path, size and mtime, and
   serves it. Generation runs on a bounded blocking pool (4 workers); misses return 404 and the
   tile keeps its icon. Files older than 30 days are pruned at startup. SVG is served as-is.
-  `tanaw://localhost/file/<path>` serves the full image for the preview pane. Both handlers
+  `filewell://localhost/file/<path>` serves the full image for the preview pane. Both handlers
   validate the path and refuse anything that is not a regular file.
 - `open_path` and `reveal_in_explorer` call the opener plugin from Rust. `open_with` calls
   `SHOpenWithDialog` through the `windows` crate. `list_drives` uses `sysinfo` (mount point,
@@ -294,11 +294,11 @@ the previous one. Results are capped at 5,000 with a notice.
 
 ### 5.9 Database (`db/`)
 
-One SQLite file at `%LOCALAPPDATA%/com.focalstack.tanaw/tanaw.db`, opened with WAL journal,
+One SQLite file at `%LOCALAPPDATA%/com.focalstack.filewell/filewell.db`, opened with WAL journal,
 `foreign_keys = ON`, `busy_timeout = 5000`. `PRAGMA user_version` carries the schema version;
 migrations are numbered SQL files embedded with `include_str!` and applied in one transaction
 each. On open, `PRAGMA integrity_check`; a failure renames the file to
-`tanaw.db.corrupt-<unix ms>` and starts a fresh database with a visible notice on Home.
+`filewell.db.corrupt-<unix ms>` and starts a fresh database with a visible notice on Home.
 Every query is parameterized.
 
 ```sql
@@ -337,8 +337,8 @@ derived by the renderer from the first line and stored for listing. Body size is
 
 ### 5.11 Backup format (`backup.rs`)
 
-A `.tanaw` file is a zip with two fixed entries: `manifest.json`
-`{ "format": "tanaw-backup", "version": 1, "createdAt": <ms>, "appVersion": "0.1.0" }` and
+A `.filewell` file is a zip with two fixed entries: `manifest.json`
+`{ "format": "filewell-backup", "version": 1, "createdAt": <ms>, "appVersion": "0.1.0" }` and
 `data.json` holding `settings`, `favorites`, `recent`, `notes` (with their versions) and
 `todos`. Export opens a native save dialog from Rust. `inspect_backup` returns counts and the
 creation date for the confirmation dialog without importing. `import_backup(mode)` rejects
@@ -349,11 +349,11 @@ transaction; `merge` upserts notes and todos by id and favorites and recent file
 
 ### 5.12 Errors and logging
 
-All commands return `Result<T, TanawError>`. `ErrorCode` is `NotFound`, `PermissionDenied`,
+All commands return `Result<T, FilewellError>`. `ErrorCode` is `NotFound`, `PermissionDenied`,
 `AlreadyExists`, `InvalidPath`, `InvalidName`, `Protected`, `Cancelled`, `Io`, `Db`,
 `Validation`, `Unsupported`. The renderer maps each code to a calm sentence and never shows a
 raw error string as the headline; the detail is available under "Details".
-`tauri-plugin-log` writes `%LOCALAPPDATA%/com.focalstack.tanaw/logs/tanaw.log`, rotating at
+`tauri-plugin-log` writes `%LOCALAPPDATA%/com.focalstack.filewell/logs/filewell.log`, rotating at
 5 MiB and keeping 3 files, level `info` in release and `debug` in dev. Failures log the path at
 `warn`; successes log counts only. Nothing is logged to the network.
 
@@ -391,7 +391,7 @@ interface ResolutionPlan { default: Resolution; perItem: Record<string, Resoluti
 interface Drive { mountPoint: string; label: string; totalBytes: number; availableBytes: number;
   kind: "fixed" | "removable" | "network" | "other" }
 interface TrashItem { id: string; name: string; originalPath: string; deletedAt: number }
-interface TanawError { code: ErrorCode; message: string; path?: string }
+interface FilewellError { code: ErrorCode; message: string; path?: string }
 ```
 
 ### 6.2 Commands
@@ -506,7 +506,7 @@ global.
 ### 7.4 Note editor
 
 CodeMirror 6 (`@codemirror/state`, `view`, `language`, `commands`, `lang-markdown`) with a
-Tanaw extension `liveMarkdown` that styles headings, emphasis, inline and fenced code, lists,
+Filewell extension `liveMarkdown` that styles headings, emphasis, inline and fenced code, lists,
 task checkboxes and links, and hides the syntax marks on every line except the one holding the
 cursor. Checkboxes toggle on click; links open on Ctrl+click through `open_path` for local
 paths and the opener for `https` URLs. The document stays plain Markdown. Auto-save debounces
@@ -614,11 +614,11 @@ both themes and fails the gate on any pair under 4.5:1 for body text.
 - No `tauri-plugin-fs`, no `tauri-plugin-shell`, no asset protocol. Capabilities:
   `core:default` plus `core:window:allow-start-dragging`, `allow-minimize`,
   `allow-toggle-maximize`, `allow-close`.
-- CSP in `tauri.conf.json`: `default-src 'self'; img-src 'self' data: http://tanaw.localhost
-  https://tanaw.localhost; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self'`.
+- CSP in `tauri.conf.json`: `default-src 'self'; img-src 'self' data: http://filewell.localhost
+  https://filewell.localhost; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self'`.
   No `connect-src` is needed: the updater runs in Rust.
 - Network policy: the only outbound call is the updater's fetch of `latest.json` from
-  `https://github.com/focalstack-lex/Tanaw./releases/latest/download/latest.json`, gated by
+  `https://github.com/focalstack-lex/Filewell/releases/latest/download/latest.json`, gated by
   the `checkUpdates` setting, and the download of the installer the user confirmed. Update
   artifacts must verify against the committed public key or they are refused.
 - Secrets: the updater private key and password are environment variables
@@ -639,10 +639,10 @@ both themes and fails the gate on any pair under 4.5:1 for body text.
 | Gate | Tool | Covers |
 | --- | --- | --- |
 | `npm run typecheck` | tsc | Renderer types |
-| `npm run lint` | ESLint with `tanaw-invariants` | Zero emoji, zero em or en dash, no silent catch, no committed secret, hooks rules |
+| `npm run lint` | ESLint with `filewell-invariants` | Zero emoji, zero em or en dash, no silent catch, no committed secret, hooks rules |
 | `npm test` | vitest | Natural sort, `name (2)` generator mirror, filter, shortcuts dispatch, command registry vs FEATURE_MAP, format helpers, store reducers |
 | `npm run verify:ui` | Playwright over the mocked renderer | Every FEATURE_MAP surface: Home, Browser list and grid, 10,000-entry scroll, search, conflict dialog, progress panel, context menu, rename, palette, notes editor and history, to-dos, trash, settings, both themes, 800 px and 1200 px widths; evidence in `reports/ui-verification/<ts>/`; a page error or a crashed renderer fails the run |
-| `cargo test` | Rust unit tests with `tempfile` | `paths.rs` rules, natural sort, listing and hidden filter, create, rename, copy, move, conflicts and keep-both naming, undo inverses and dropped preconditions, cancellation, search batching and cancel, migrations from empty and from each prior version, notes versioning and pruning, backup round trip and every rejection rule. Recycle Bin tests run only with `TANAW_TRASH_TESTS=1` because they touch the real bin |
+| `cargo test` | Rust unit tests with `tempfile` | `paths.rs` rules, natural sort, listing and hidden filter, create, rename, copy, move, conflicts and keep-both naming, undo inverses and dropped preconditions, cancellation, search batching and cancel, migrations from empty and from each prior version, notes versioning and pruning, backup round trip and every rejection rule. Recycle Bin tests run only with `FILEWELL_TRASH_TESTS=1` because they touch the real bin |
 | `cargo clippy -- -D warnings` | clippy | Including denied unwrap, expect, panic |
 | `npm run map:code:check` | generator | `docs/CODE_MAP.md` matches the source |
 | `npm run verify:contrast` | script | Token pairs in both themes |
@@ -667,7 +667,7 @@ Each piece ends with software that runs, passes the gate, and is journaled and p
 2. **File manager**: listing, sidebar, breadcrumb, list and grid views, selection, context
    menu, all file operations with progress, conflicts, undo, Recycle Bin view, drag in from
    Explorer, open and Open with, thumbnails, preview pane, Home with drives, favorites and
-   recent. Deliverable: Tanaw replaces Explorer for daily browsing.
+   recent. Deliverable: Filewell replaces Explorer for daily browsing.
 3. **Search**: filter field, subfolder search with streaming and cancel, results view.
 4. **Productivity**: notes list and editor, versions, soft delete, to-dos.
 5. **Portability and release**: export and import, updater, release workflow, installer,

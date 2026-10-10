@@ -8,7 +8,7 @@
 
 **Tech Stack:** Tauri 2 (Rust stable), React 19, TypeScript, Vite, zustand, lucide-react, rusqlite (bundled), tauri-plugin-log, tauri-plugin-window-state, ESLint with custom invariant rules, vitest, Playwright.
 
-**Spec:** `docs/superpowers/specs/2026-10-02-tanaw-v1-design.md`. Section numbers below refer to it.
+**Spec:** `docs/superpowers/specs/2026-10-02-filewell-v1-design.md`. Section numbers below refer to it.
 
 ## Global Constraints
 
@@ -244,7 +244,7 @@ SOFTWARE.
 A calm, focused file manager for Windows, with notes and to-dos beside your files.
 Free and open source under the MIT license.
 
-Tanaw is being built in five pieces (see `docs/superpowers/specs/2026-10-02-tanaw-v1-design.md`).
+Tanaw is being built in five pieces (see `docs/superpowers/specs/2026-10-02-filewell-v1-design.md`).
 Piece 1, the foundation, is what this repository holds today: the native shell, tabs, themes,
 settings, the command palette and the verification gate.
 
@@ -3235,7 +3235,7 @@ The `ls */package/files` line prints the real file names; if a package names its
 /* ---------------------------------------------------------------------------
    Tanaw design system. The chrome is monochrome; color carries information
    only (selection, focus, status, file types). Token values are the table in
-   docs/superpowers/specs/2026-10-02-tanaw-v1-design.md, section 8.2.
+   docs/superpowers/specs/2026-10-02-filewell-v1-design.md, section 8.2.
 --------------------------------------------------------------------------- */
 
 @font-face {

@@ -17,7 +17,7 @@ describe("scanText", () => {
 
   it("reports emoji and accepts the legal typographic symbols", () => {
     expect(scanText(`label = "${GRIN}"`)).toEqual([{ line: 1, column: 10, kind: "emoji", sample: GRIN }]);
-    expect(scanText("Copyright © 2026 Tanaw™")).toEqual([]);
+    expect(scanText("Copyright © 2026 Filewell™")).toEqual([]);
   });
 
   it("passes clean text, including escaped code points written as text", () => {

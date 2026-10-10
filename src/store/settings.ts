@@ -2,7 +2,7 @@ import { create } from "zustand";
 import type { SettingKey, Settings } from "../types";
 import { DEFAULT_SETTINGS } from "../lib/defaults";
 import { describeError } from "../lib/errors";
-import { ipc, toTanawError } from "../lib/ipc";
+import { ipc, toFilewellError } from "../lib/ipc";
 import { applyTheme } from "../lib/theme";
 import { useUi } from "./ui";
 
@@ -15,7 +15,7 @@ interface SettingsState {
 }
 
 function report(raw: unknown): void {
-  const { title, detail } = describeError(toTanawError(raw));
+  const { title, detail } = describeError(toFilewellError(raw));
   useUi.getState().toast("error", title, detail);
 }
 

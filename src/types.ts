@@ -36,7 +36,7 @@ export type ErrorCode =
   | "validation"
   | "unsupported";
 
-export interface TanawError {
+export interface FilewellError {
   code: ErrorCode;
   message: string;
   path?: string;

@@ -52,7 +52,7 @@ export function SettingsView() {
 
       <div className="settings-group">
         <h2 className="settings-heading">Updates</h2>
-        <Field label="Check for updates when Tanaw starts" hint="The only network request Tanaw makes. Installing always asks first.">
+        <Field label="Check for updates when Filewell starts" hint="The only network request Filewell makes. Installing always asks first.">
           <input
             type="checkbox"
             className="checkbox"

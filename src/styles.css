@@ -1,7 +1,7 @@
 /* ---------------------------------------------------------------------------
-   Tanaw design system. The chrome is monochrome; color carries information
+   Filewell design system. The chrome is monochrome; color carries information
    only (selection, focus, status, file types). Token values are the table in
-   docs/superpowers/specs/2026-10-02-tanaw-v1-design.md, section 8.2.
+   docs/superpowers/specs/2026-10-02-filewell-v1-design.md, section 8.2.
 --------------------------------------------------------------------------- */
 
 @font-face {

@@ -50,7 +50,7 @@ fn a_damaged_file_is_quarantined_and_replaced() {
     let quarantined = std::fs::read_dir(dir.path())
         .unwrap()
         .filter_map(Result::ok)
-        .any(|entry| entry.file_name().to_string_lossy().starts_with("tanaw.db.corrupt-"));
+        .any(|entry| entry.file_name().to_string_lossy().starts_with("filewell.db.corrupt-"));
     assert!(quarantined);
 }
 
@@ -75,7 +75,7 @@ fn a_locked_healthy_database_is_reported_not_quarantined() {
     let dir = tempfile::tempdir().unwrap();
     drop(open(dir.path()).unwrap());
 
-    // Another process (a second Tanaw instance, a backup tool) holds the file exclusively.
+    // Another process (a second Filewell instance, a backup tool) holds the file exclusively.
     let holder = Connection::open(dir.path().join(DB_FILE)).unwrap();
     holder
         .execute_batch("PRAGMA locking_mode = EXCLUSIVE; BEGIN EXCLUSIVE; INSERT INTO settings (key, value) VALUES ('theme', '\"dark\"'); COMMIT;")

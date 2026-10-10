@@ -1,4 +1,4 @@
-//! What happens when Tanaw cannot start. A failure inside Tauri's setup closure
+//! What happens when Filewell cannot start. A failure inside Tauri's setup closure
 //! would otherwise become a panic, and release builds abort on panic with no
 //! console, so the user would see the window flash and vanish with nothing in
 //! the log. Instead the cause is logged, shown in a native message box, and the
@@ -6,20 +6,20 @@
 
 use std::path::Path;
 
-use crate::error::TanawError;
+use crate::error::FilewellError;
 
 #[cfg(test)]
 mod tests;
 
-const TITLE: &str = "Tanaw could not start";
-const ADVICE: &str = "If Tanaw is already open, close it and start it again. If this keeps happening, \
+const TITLE: &str = "Filewell could not start";
+const ADVICE: &str = "If Filewell is already open, close it and start it again. If this keeps happening, \
 check that the folder exists, has free space and is not read-only.";
 
 /// The sentence the user reads: where, why, and what to try.
-pub fn failure_message(data_dir: Option<&Path>, error: &TanawError) -> String {
+pub fn failure_message(data_dir: Option<&Path>, error: &FilewellError) -> String {
     let headline = match data_dir {
-        Some(dir) => format!("Tanaw could not open its data folder at {}.", dir.display()),
-        None => "Tanaw could not find its data folder.".to_string(),
+        Some(dir) => format!("Filewell could not open its data folder at {}.", dir.display()),
+        None => "Filewell could not find its data folder.".to_string(),
     };
     format!("{headline}\n\n{}\n\n{ADVICE}", as_sentence(&error.message))
 }

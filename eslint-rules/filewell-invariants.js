@@ -1,15 +1,15 @@
 /**
- * Tanaw invariant rules for ESLint.
+ * Filewell invariant rules for ESLint.
  *
  * These rules turn prose directives (the Severus house style) into machine
  * enforced failures. Characters written as unicode escapes (for example
  * "\u2014") do not match the raw-text scans, so pattern definitions stay legal.
  *
  * Rules:
- *   tanaw/no-emoji              Zero emoji in source, copy and comments.
- *   tanaw/no-dash-punctuation   Zero em dash and en dash.
- *   tanaw/no-silent-catch       No empty catch block without a stated reason.
- *   tanaw/no-hardcoded-secret   No credentials committed to source.
+ *   filewell/no-emoji              Zero emoji in source, copy and comments.
+ *   filewell/no-dash-punctuation   Zero em dash and en dash.
+ *   filewell/no-silent-catch       No empty catch block without a stated reason.
+ *   filewell/no-hardcoded-secret   No credentials committed to source.
  */
 
 const DASH_PATTERN = /[\u2013\u2014]/g;
@@ -124,7 +124,7 @@ const noHardcodedSecret = {
 };
 
 export default {
-  meta: { name: "tanaw-invariants", version: "1.0.0" },
+  meta: { name: "filewell-invariants", version: "1.0.0" },
   rules: {
     "no-emoji": noEmoji,
     "no-dash-punctuation": noDashPunctuation,

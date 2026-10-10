@@ -19,7 +19,7 @@ applyTheme("system");
 installBrowserGuard();
 
 const root = document.getElementById("root");
-if (!root) throw new Error("Tanaw: index.html has no #root element");
+if (!root) throw new Error("Filewell: index.html has no #root element");
 ReactDOM.createRoot(root).render(
   <React.StrictMode>
     <App />

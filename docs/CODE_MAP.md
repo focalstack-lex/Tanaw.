@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-04T15:59:54.168Z
-commit: be84e04
-fingerprint: 27965483d6756893
+generated: 2026-10-10T00:52:41.732Z
+commit: 78ce22f
+fingerprint: 43d696c4388285bd
 -->
 # Code Map (Agent Navigation)
 
@@ -54,8 +54,8 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `tanaw-invariants.js` | 135 | Tanaw Invariants |
-| `tanaw-invariants.d.ts` | 5 | Tanaw Invariants.D |
+| `filewell-invariants.js` | 135 | Filewell Invariants |
+| `filewell-invariants.d.ts` | 5 | Filewell Invariants.D |
 
 ## scripts
 

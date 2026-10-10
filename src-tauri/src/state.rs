@@ -5,7 +5,7 @@ use std::sync::{Mutex, MutexGuard};
 
 use rusqlite::Connection;
 
-use crate::error::TanawError;
+use crate::error::FilewellError;
 
 /// The database connection sits behind a mutex because commands run on a
 /// thread pool; SQLite in WAL mode makes the critical sections short.
@@ -22,9 +22,9 @@ impl AppState {
 
     /// Locks the connection. A poisoned mutex means an earlier command panicked
     /// while holding it; that is reported as a database error, never unwrapped.
-    pub fn db(&self) -> Result<MutexGuard<'_, Connection>, TanawError> {
+    pub fn db(&self) -> Result<MutexGuard<'_, Connection>, FilewellError> {
         self.db
             .lock()
-            .map_err(|_| TanawError::db("the database lock was poisoned by an earlier failure"))
+            .map_err(|_| FilewellError::db("the database lock was poisoned by an earlier failure"))
     }
 }
