@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-10T03:41:15.844Z
-commit: b61a527
-fingerprint: bc83cef7ea1fea47
+generated: 2026-10-10T03:45:50.024Z
+commit: f116f75
+fingerprint: 010f185acac70650
 -->
 # Code Map (Agent Navigation)
 
@@ -15,7 +15,7 @@ disagree, the code wins and the map is regenerated.
 ## Summary
 
 - Files indexed: 103
-- Total lines indexed: 7,975
+- Total lines indexed: 8,138
 - Anchor index emitted for files over 300 lines: 3
 
 ### Areas
@@ -24,7 +24,7 @@ disagree, the code wins and the map is regenerated.
 |---|---:|---:|
 | `.` | 4 | 92 |
 | `eslint-rules` | 2 | 140 |
-| `scripts` | 4 | 812 |
+| `scripts` | 4 | 961 |
 | `src` | 5 | 1,604 |
 | `src-tauri` | 2 | 71 |
 | `src-tauri/src` | 8 | 520 |
@@ -34,7 +34,7 @@ disagree, the code wins and the map is regenerated.
 | `src-tauri/src/paths` | 1 | 46 |
 | `src-tauri/src/shell` | 1 | 26 |
 | `src-tauri/src/startup` | 1 | 30 |
-| `src/components/browser` | 8 | 741 |
+| `src/components/browser` | 8 | 755 |
 | `src/components/home` | 1 | 62 |
 | `src/components/palette` | 1 | 140 |
 | `src/components/settings` | 1 | 77 |
@@ -65,7 +65,7 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `verify-ui.mjs` | 350 | Verify Ui |
+| `verify-ui.mjs` | 499 | Verify Ui |
 | `generate-code-map.mjs` | 327 | Agent Navigation Map Generator |
 | `verify-contrast.mjs` | 68 | Verify Contrast |
 | `verify-text.mjs` | 67 | Verify Text |
@@ -150,7 +150,7 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `BrowserView.tsx` | 143 | BrowserView |
+| `BrowserView.tsx` | 157 | BrowserView |
 | `Breadcrumb.tsx` | 132 | Breadcrumb |
 | `ContextMenu.tsx` | 118 | ContextMenu |
 | `FileList.tsx` | 117 | FileList |
@@ -263,14 +263,16 @@ disagree, the code wins and the map is regenerated.
 Files over 300 lines. Each entry is a line number to jump to, so a target
 resolves to a window instead of a full read.
 
-### `scripts/verify-ui.mjs` (350 lines)
+### `scripts/verify-ui.mjs` (499 lines)
 
 - 40: `record()` | 45: `sleep()` | 47: `waitForServer()`
 - 61: `startDevServer()` | 73: `stopDevServer()` | 83: `open()`
 - 92: `visible()` | 101: `hidden()` | 110: `capture()`
 - 112: `drive()` | 165: `status()` | 204: `fire()`
 - 205: `menu()` | 206: `key()` | 284: `layoutReport()`
-- 303: `errorToasts()` | 307: `main()`
+- 303: `errorToasts()` | 307: `main()` | 351: `driveBrowsing()`
+- 359: `rowNames()` | 360: `currentCrumb()` | 361: `atCrumb()`
+- 369: `goTo()` | 374: `lastShellCall()`
 
 ### `scripts/generate-code-map.mjs` (327 lines)
 

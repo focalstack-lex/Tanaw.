@@ -92,6 +92,20 @@ export function BrowserView({ tab }: { tab: Tab }) {
     }
   }, [status, listing]);
 
+  // The menu's focus restore gives up when the opener was the page body (a
+  // right-click on a row never focuses the view), so hand focus back to the view.
+  const menuWasOpen = useRef(false);
+  useEffect(() => {
+    if (menu) {
+      menuWasOpen.current = true;
+      return;
+    }
+    if (!menuWasOpen.current) return;
+    menuWasOpen.current = false;
+    if (document.activeElement && document.activeElement !== document.body) return;
+    bodyRef.current?.querySelector<HTMLElement>('[data-testid="file-list"], [data-testid="file-grid"]')?.focus();
+  }, [menu]);
+
   const onAction = useCallback(
     (action: EntryAction) => {
       if (action.kind === "open") void openEntry(tab.id, action.entry);

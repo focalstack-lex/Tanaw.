@@ -319,6 +319,7 @@ async function main() {
     } else {
       browser = await chromium.launch({ headless: !HEADED });
       await drive(browser);
+      await driveBrowsing(browser);
     }
 
     const failed = results.filter((entry) => !entry.passed);
@@ -344,6 +345,154 @@ async function main() {
     await sleep(500);
   }
   process.exit(exitCode);
+}
+
+/** Steps 13 to 22: browsing the fake disk of the dev harness (piece 2a). */
+async function driveBrowsing(browser) {
+  const context = await browser.newContext({ viewport: VIEWPORT, colorScheme: "dark" });
+  const page = await context.newPage();
+  page.on("console", (message) => { if (message.type() === "error") consoleErrors.push(message.text()); });
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  await open(page);
+
+  const rows = '[data-testid="file-row"]';
+  const rowNames = () => page.locator(`${rows} .name-text`).allTextContents();
+  const currentCrumb = () => page.locator('[data-testid="breadcrumb"] .crumb.is-current').textContent();
+  const atCrumb = async (label) => {
+    try {
+      await page.waitForFunction((want) => document.querySelector('[data-testid="breadcrumb"] .crumb.is-current')?.textContent === want, label, { timeout: STEP_TIMEOUT_MS });
+      return true;
+    } catch {
+      return false;
+    }
+  };
+  const goTo = async (path) => {
+    await page.keyboard.press("Control+KeyL");
+    await page.locator('[data-testid="path-input"]').fill(path);
+    await page.keyboard.press("Enter");
+  };
+  const lastShellCall = () => page.evaluate(() => window.__filewellMock.opened.at(-1));
+
+  // 13. Places on Home and in the sidebar.
+  const places = {
+    cards: await page.locator('[data-testid="drive-card"]').count(),
+    drives: await page.locator('[data-testid="place-drive"]').count(),
+    folders: await page.locator('[data-testid="place-folder"]').count(),
+  };
+  await capture(page, "09-home-drives");
+  record("Home shows drive cards; the sidebar lists drives and known folders", places.cards === 2 && places.drives === 2 && places.folders === 7, JSON.stringify(places));
+
+  // 14. A drive card opens the drive; hidden system entries stay hidden.
+  await page.locator('[data-testid="drive-card"]').first().click();
+  await visible(page, '[data-testid="file-list"]');
+  const driveRows = await rowNames();
+  await capture(page, "10-drive-c");
+  record("A drive card opens the drive with hidden entries filtered", driveRows.join(",") === "Program Files,Users,Windows" && (await currentCrumb()) === "C:", JSON.stringify(driveRows));
+
+  // 15. Double-click into folders, jump by crumb, then Back, Back, Forward, Up.
+  await page.locator(rows, { hasText: "Users" }).dblclick();
+  const intoUsers = await atCrumb("Users");
+  await page.locator(rows, { hasText: "dev" }).dblclick();
+  const intoDev = await atCrumb("dev");
+  await page.locator('[data-testid="breadcrumb"] .crumb', { hasText: "C:" }).click();
+  const byCrumb = await atCrumb("C:");
+  await page.keyboard.press("Alt+ArrowLeft");
+  const back1 = await atCrumb("dev");
+  await page.keyboard.press("Alt+ArrowLeft");
+  const back2 = await atCrumb("Users");
+  await page.keyboard.press("Alt+ArrowRight");
+  const forward = await atCrumb("dev");
+  await page.keyboard.press("Alt+ArrowUp");
+  const up = await atCrumb("Users");
+  record("Double-click, crumbs, Alt+Left, Alt+Right and Alt+Up move through folders and history",
+    intoUsers && intoDev && byCrumb && back1 && back2 && forward && up,
+    JSON.stringify({ intoUsers, intoDev, byCrumb, back1, back2, forward, up }));
+
+  // 16. 10,000 entries: virtualized, quick, and End reaches the last one.
+  const started = Date.now();
+  await goTo("D:\\Big folder");
+  await page.locator(rows, { hasText: "file-00001.txt" }).waitFor({ timeout: STEP_TIMEOUT_MS });
+  const firstRowMs = Date.now() - started;
+  const big = await page.evaluate(() => ({
+    rowCount: Number(document.querySelector('[data-testid="file-list"]')?.getAttribute("aria-rowcount")),
+    inDom: document.querySelectorAll('[data-testid="file-row"]').length,
+  }));
+  await page.locator(rows).first().click();
+  await page.keyboard.press("End");
+  const lastSelected = await page.locator(`${rows}[aria-selected="true"] .name-text`).allTextContents();
+  await capture(page, "11-big-folder-end");
+  record("10,000 entries list in under 2 s, under 100 rows in the DOM, End selects the last",
+    big.rowCount === 10_001 && big.inDom < 100 && firstRowMs < 2_000 && lastSelected.join() === "file-10000.txt",
+    JSON.stringify({ ...big, firstRowMs, lastSelected }));
+
+  // 17. Selection: click, Shift+Down twice, then Ctrl+A; the status bar counts it.
+  await goTo("C:\\Users\\dev\\Documents");
+  await atCrumb("Documents");
+  const docRows = await rowNames();
+  await page.locator(rows).first().click();
+  await page.keyboard.press("Shift+ArrowDown");
+  await page.keyboard.press("Shift+ArrowDown");
+  const extended = await page.locator(`${rows}[aria-selected="true"]`).count();
+  const status = (await page.locator('[data-testid="status-selection"]').textContent()) ?? "";
+  await page.keyboard.press("Control+KeyA");
+  const all = await page.locator(`${rows}[aria-selected="true"]`).count();
+  record("Natural order, Shift+arrows extend, Ctrl+A selects all, the status bar counts",
+    docRows.join(",") === "budget.xlsx,file2.txt,file10.txt,Report.docx" && extended === 3 && status.startsWith("3 selected") && all === 4,
+    JSON.stringify({ docRows, extended, status, all }));
+
+  // 18. Grid and back to list.
+  await page.keyboard.press("Control+Shift+Digit2");
+  const gridOk = await visible(page, '[data-testid="file-grid"]');
+  const tiles = await page.locator('[data-testid="file-tile"]').count();
+  await capture(page, "12-grid");
+  await page.keyboard.press("Control+Shift+Digit1");
+  const listBack = await visible(page, '[data-testid="file-list"]');
+  record("Ctrl+Shift+2 shows the grid and Ctrl+Shift+1 the list", gridOk && tiles === 4 && listBack, JSON.stringify({ gridOk, tiles, listBack }));
+
+  // 19. Context menu: opens on right-click with the actions, Escape returns focus.
+  await page.locator(rows, { hasText: "Report.docx" }).click({ button: "right" });
+  const menuOk = await visible(page, '[data-testid="context-menu"]');
+  const menuItems = await page.locator('[data-testid="context-menu"] [role="menuitem"]').allTextContents();
+  await capture(page, "13-context-menu");
+  await page.keyboard.press("Escape");
+  const menuClosed = await hidden(page, '[data-testid="context-menu"]');
+  const focusBack = await page.evaluate(() => document.activeElement?.getAttribute("data-testid"));
+  record("Right-click shows Open, Open with, Show in Explorer and Copy path; Escape closes it and returns focus",
+    menuOk && ["Open", "Open with", "Show in Explorer"].every((item) => menuItems.includes(item)) && menuItems.some((item) => item.startsWith("Copy")) && menuClosed && focusBack === "file-list",
+    JSON.stringify({ menuItems, menuClosed, focusBack }));
+
+  // 20. Enter opens, Ctrl+Enter reveals, the menu's Open with asks Windows.
+  await page.locator(rows, { hasText: "Report.docx" }).click();
+  await page.keyboard.press("Enter");
+  const openCall = await lastShellCall();
+  await page.keyboard.press("Control+Enter");
+  const revealCall = await lastShellCall();
+  await page.locator(rows, { hasText: "Report.docx" }).click({ button: "right" });
+  await page.locator('[data-testid="context-menu"] [role="menuitem"]', { hasText: "Open with" }).click();
+  const openWithCall = await lastShellCall();
+  const report = "C:\\Users\\dev\\Documents\\Report.docx";
+  record("Enter opens, Ctrl+Enter shows in Explorer, Open with reaches the shell",
+    openCall?.action === "open" && openCall.path === report && revealCall?.action === "reveal" && openWithCall?.action === "openWith",
+    JSON.stringify({ openCall, revealCall, openWithCall }));
+
+  // 21. A missing folder explains itself and offers to try again.
+  await goTo("Q:\\nowhere");
+  const missingOk = await visible(page, 'text="That item no longer exists."');
+  const retry = await page.getByRole("button", { name: "Try again" }).count();
+  await capture(page, "14-missing-folder");
+  record("A missing folder shows a calm error with Try again", missingOk && retry === 1, `visible=${missingOk} retry=${retry}`);
+
+  // 22. The browser view fits the 720 px minimum.
+  await goTo("C:\\Users\\dev\\Documents");
+  await atCrumb("Documents");
+  await page.setViewportSize(MIN_WINDOW);
+  await sleep(200);
+  const layout = await layoutReport(page);
+  await capture(page, "15-browser-720");
+  record("720 px: the browser view fits without overflow", layout.ok, JSON.stringify(layout));
+  record("No error toasts while browsing", (await errorToasts(page)) === 0);
+
+  await context.close();
 }
 
 await main();
