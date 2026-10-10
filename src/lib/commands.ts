@@ -3,7 +3,7 @@
 // checked against it by a test.
 import { isEditableTarget, matchesShortcut, parseShortcut, type KeyLike, type Shortcut } from "./shortcuts";
 
-export type CommandGroup = "tabs" | "navigate" | "view" | "app";
+export type CommandGroup = "tabs" | "navigate" | "view" | "edit" | "files" | "app";
 
 export interface Command {
   id: string;

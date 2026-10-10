@@ -34,12 +34,18 @@ Fixed bindings (spec 7.3). Scope `global` fires even while a text field has focu
 | `Ctrl+Shift+Tab` | `tab.previous` | global |
 | `Ctrl+<n>` | `tab.select.<n>` | global, n = 1 to 9 |
 | `Ctrl+Comma` | `app.settings` | global |
+| `Alt+Left` | `nav.back` | outside text fields |
+| `Alt+Right` | `nav.forward` | outside text fields |
+| `Alt+Up` | `nav.up` | outside text fields |
+| `Ctrl+L` | `nav.path` | outside text fields |
+| `F5` | `view.refresh` | outside text fields |
+| `Ctrl+A` | `edit.selectAll` | outside text fields |
 | `Ctrl+Shift+E` | `panel.toggle` | outside text fields |
 | `Ctrl+H` | `view.toggleHidden` | outside text fields |
 | `Ctrl+Shift+1` | `view.list` | outside text fields |
 | `Ctrl+Shift+2` | `view.grid` | outside text fields |
 
-Palette-only commands: `nav.home`, `theme.system`, `theme.light`, `theme.dark`.
+Palette-only commands: `nav.home`, `theme.system`, `theme.light`, `theme.dark`, `sort.name`, `sort.modified`, `sort.kind`, `sort.size`, `file.openWith`, `file.reveal`, `file.copyPath`.
 
 ## IPC
 

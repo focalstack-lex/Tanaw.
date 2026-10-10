@@ -8,6 +8,8 @@ const GROUP_LABEL: Record<CommandGroup, string> = {
   tabs: "Tabs",
   navigate: "Navigate",
   view: "View",
+  edit: "Edit",
+  files: "Files",
   app: "App",
 };
 

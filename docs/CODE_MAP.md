@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-10T03:31:56.356Z
-commit: e78dccc
-fingerprint: fd979a6135f0fd23
+generated: 2026-10-10T03:34:10.974Z
+commit: d120e95
+fingerprint: b9e649e8a702040a
 -->
 # Code Map (Agent Navigation)
 
@@ -14,8 +14,8 @@ disagree, the code wins and the map is regenerated.
 
 ## Summary
 
-- Files indexed: 91
-- Total lines indexed: 6,362
+- Files indexed: 101
+- Total lines indexed: 7,888
 - Anchor index emitted for files over 300 lines: 3
 
 ### Areas
@@ -25,7 +25,7 @@ disagree, the code wins and the map is regenerated.
 | `.` | 4 | 92 |
 | `eslint-rules` | 2 | 140 |
 | `scripts` | 4 | 812 |
-| `src` | 5 | 1,128 |
+| `src` | 5 | 1,604 |
 | `src-tauri` | 2 | 71 |
 | `src-tauri/src` | 8 | 520 |
 | `src-tauri/src/data` | 3 | 215 |
@@ -34,14 +34,15 @@ disagree, the code wins and the map is regenerated.
 | `src-tauri/src/paths` | 1 | 46 |
 | `src-tauri/src/shell` | 1 | 26 |
 | `src-tauri/src/startup` | 1 | 30 |
-| `src/components/home` | 1 | 18 |
-| `src/components/palette` | 1 | 138 |
+| `src/components/browser` | 8 | 699 |
+| `src/components/home` | 1 | 62 |
+| `src/components/palette` | 1 | 140 |
 | `src/components/settings` | 1 | 77 |
-| `src/components/shell` | 4 | 230 |
+| `src/components/shell` | 4 | 302 |
 | `src/components/ui` | 7 | 166 |
-| `src/dev` | 1 | 93 |
-| `src/lib` | 14 | 610 |
-| `src/store` | 7 | 419 |
+| `src/dev` | 1 | 214 |
+| `src/lib` | 16 | 716 |
+| `src/store` | 7 | 425 |
 | `src/tests` | 14 | 633 |
 
 ## .
@@ -73,9 +74,9 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `styles.css` | 919 | Styles |
+| `styles.css` | 1392 | Styles |
 | `types.ts` | 93 | Types |
-| `App.tsx` | 86 | App |
+| `App.tsx` | 89 | App |
 | `main.tsx` | 28 | Main |
 | `vite-env.d.ts` | 2 | Vite Env.D |
 
@@ -145,17 +146,30 @@ disagree, the code wins and the map is regenerated.
 |---|---:|---|
 | `tests.rs` | 30 | Tests |
 
+## src/components/browser
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `Breadcrumb.tsx` | 120 | Breadcrumb |
+| `ContextMenu.tsx` | 118 | ContextMenu |
+| `FileList.tsx` | 117 | FileList |
+| `BrowserView.tsx` | 114 | BrowserView |
+| `useFileKeys.ts` | 85 | UseFileKeys |
+| `FileGrid.tsx` | 84 | FileGrid |
+| `Toolbar.tsx` | 40 | Toolbar |
+| `FileIcon.tsx` | 21 | FileIcon |
+
 ## src/components/home
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `HomeView.tsx` | 18 | HomeView |
+| `HomeView.tsx` | 62 | HomeView |
 
 ## src/components/palette
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `CommandPalette.tsx` | 138 | CommandPalette |
+| `CommandPalette.tsx` | 140 | CommandPalette |
 
 ## src/components/settings
 
@@ -168,9 +182,9 @@ disagree, the code wins and the map is regenerated.
 | File | Lines | Purpose |
 |---|---:|---|
 | `TitleBar.tsx` | 105 | TitleBar |
+| `Sidebar.tsx` | 98 | Sidebar |
 | `SidePanel.tsx` | 51 | SidePanel |
-| `Sidebar.tsx` | 48 | Sidebar |
-| `StatusBar.tsx` | 26 | StatusBar |
+| `StatusBar.tsx` | 48 | StatusBar |
 
 ## src/components/ui
 
@@ -188,25 +202,27 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `mockBackend.ts` | 93 | MockBackend |
+| `mockBackend.ts` | 214 | MockBackend |
 
 ## src/lib
 
 | File | Lines | Purpose |
 |---|---:|---|
+| `appCommands.ts` | 92 | AppCommands |
 | `commands.ts` | 81 | Commands |
 | `paths.ts` | 66 | Paths |
 | `selection.ts` | 65 | Selection |
 | `format.ts` | 62 | Format |
 | `shortcuts.ts` | 60 | Shortcuts |
-| `appCommands.ts` | 48 | AppCommands |
 | `browserGuard.ts` | 47 | BrowserGuard |
+| `fileActions.ts` | 46 | FileActions |
 | `ipc.ts` | 45 | Ipc |
 | `sortEntries.ts` | 31 | SortEntries |
 | `theme.ts` | 27 | Theme |
 | `fileTypes.ts` | 24 | FileTypes |
 | `errors.ts` | 22 | Errors |
 | `useRestoreFocus.ts` | 18 | UseRestoreFocus |
+| `useDelayed.ts` | 16 | UseDelayed |
 | `defaults.ts` | 14 | Defaults |
 
 ## src/store
@@ -214,7 +230,7 @@ disagree, the code wins and the map is regenerated.
 | File | Lines | Purpose |
 |---|---:|---|
 | `tabs.ts` | 170 | Tabs |
-| `ui.ts` | 72 | Ui |
+| `ui.ts` | 78 | Ui |
 | `settings.ts` | 52 | Settings |
 | `listings.ts` | 51 | Listings |
 | `places.ts` | 34 | Places |

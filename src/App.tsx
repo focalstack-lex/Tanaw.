@@ -4,9 +4,11 @@ import { commandForKey } from "./lib/commands";
 import { describeError } from "./lib/errors";
 import { ipc, toFilewellError } from "./lib/ipc";
 import { OVERLAY_QUERY, usePanel } from "./store/panel";
+import { usePlaces } from "./store/places";
 import { useSettings } from "./store/settings";
 import { activeTab, useTabs } from "./store/tabs";
 import { useUi } from "./store/ui";
+import { BrowserView } from "./components/browser/BrowserView";
 import { HomeView } from "./components/home/HomeView";
 import { CommandPalette } from "./components/palette/CommandPalette";
 import { SettingsView } from "./components/settings/SettingsView";
@@ -28,6 +30,7 @@ export default function App() {
   useEffect(() => {
     ensureAppCommands();
     void load();
+    void usePlaces.getState().load();
     ipc.getAppInfo().then(setAppInfo).catch((raw: unknown) => {
       const { title, detail } = describeError(toFilewellError(raw));
       useUi.getState().toast("error", title, detail);
@@ -73,7 +76,7 @@ export default function App() {
       <TitleBar />
       <Sidebar />
       <main className="content" data-testid="content">
-        {tab.view === "settings" ? <SettingsView /> : <HomeView />}
+        {tab.view === "settings" ? <SettingsView /> : tab.view === "browser" ? <BrowserView key={tab.id} tab={tab} /> : <HomeView />}
       </main>
       {panelOpen && <SidePanel />}
       <StatusBar />

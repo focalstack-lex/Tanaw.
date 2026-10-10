@@ -34,6 +34,9 @@ interface UiState {
   answer: (ok: boolean) => void;
   appInfo: AppInfo | null;
   setAppInfo: (info: AppInfo) => void;
+  /** Bumped by the "Edit the folder path" command; the breadcrumb opens its field. */
+  pathEditRequest: number;
+  requestPathEdit: () => void;
 }
 
 const TOAST_MS: Record<ToastKind, number> = { info: 6000, success: 6000, error: 10000 };
@@ -68,4 +71,7 @@ export const useUi = create<UiState>((set, get) => ({
 
   appInfo: null,
   setAppInfo: (appInfo) => set({ appInfo }),
+
+  pathEditRequest: 0,
+  requestPathEdit: () => set((state) => ({ pathEditRequest: state.pathEditRequest + 1 })),
 }));

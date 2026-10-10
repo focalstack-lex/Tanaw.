@@ -24,6 +24,7 @@
     "verify:all": "npm run verify && npm run verify:ui"
   },
   "dependencies": {
+    "@tanstack/react-virtual": "^3.14.14",
     "@tauri-apps/api": "^2.12.1",
     "lucide-react": "^1.49.0",
     "react": "^19.3.0",
