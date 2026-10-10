@@ -1,4 +1,4 @@
-# Tanaw
+# Filewell
 
 A calm, focused file manager for Windows, with notes and to-dos beside your files.
 Free and open source under the MIT license.
