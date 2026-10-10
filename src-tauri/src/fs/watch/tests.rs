@@ -37,5 +37,6 @@ fn one_watcher_per_tab_and_unwatch_releases_it() {
 fn a_missing_folder_cannot_be_watched() {
     let dir = tempfile::tempdir().unwrap();
     let missing = dir.path().join("gone");
-    assert!(Watchers::default().watch("tab".into(), missing, |_| {}).is_err());
+    let error = Watchers::default().watch("tab".into(), missing, |_| {}).unwrap_err();
+    assert_eq!(error.code, ErrorCode::NotFound);
 }

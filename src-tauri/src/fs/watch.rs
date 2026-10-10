@@ -10,10 +10,11 @@ use std::time::Duration;
 use notify_debouncer_mini::notify::{RecommendedWatcher, RecursiveMode};
 use notify_debouncer_mini::{new_debouncer, DebounceEventResult, Debouncer};
 use serde::Serialize;
-use tauri::{AppHandle, Emitter, State};
+use tauri::{AppHandle, Emitter, Manager};
 
 use crate::error::{ErrorCode, FilewellError};
-use crate::paths::validate_path;
+use crate::paths::{must_exist, validate_path};
+use crate::fs::run_blocking;
 use crate::state::AppState;
 
 #[cfg(test)]
@@ -31,6 +32,7 @@ impl Watchers {
     where
         F: Fn(String) + Send + 'static,
     {
+        must_exist(&path)?;
         let display = path.display().to_string();
         let reported = display.clone();
         let mut debouncer = new_debouncer(DEBOUNCE, move |result: DebounceEventResult| match result {
@@ -75,16 +77,20 @@ struct DirChanged {
 }
 
 #[tauri::command]
-pub fn watch_dir(app: AppHandle, state: State<'_, AppState>, tab_id: String, path: String) -> Result<(), FilewellError> {
+pub async fn watch_dir(app: AppHandle, tab_id: String, path: String) -> Result<(), FilewellError> {
     let path = validate_path(&path)?;
-    state.watchers.watch(tab_id, path, move |changed| {
-        if let Err(error) = app.emit("dir-changed", DirChanged { path: changed }) {
-            log::warn!("could not emit dir-changed: {error}");
-        }
+    run_blocking(move || {
+        let emitter = app.clone();
+        app.state::<AppState>().watchers.watch(tab_id, path, move |changed| {
+            if let Err(error) = emitter.emit("dir-changed", DirChanged { path: changed }) {
+                log::warn!("could not emit dir-changed: {error}");
+            }
+        })
     })
+    .await
 }
 
 #[tauri::command]
-pub fn unwatch(state: State<'_, AppState>, tab_id: String) -> Result<(), FilewellError> {
-    state.watchers.unwatch(&tab_id).map(|_| ())
+pub async fn unwatch(app: AppHandle, tab_id: String) -> Result<(), FilewellError> {
+    run_blocking(move || app.state::<AppState>().watchers.unwatch(&tab_id).map(|_| ())).await
 }

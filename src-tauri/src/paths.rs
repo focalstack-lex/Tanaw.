@@ -32,3 +32,12 @@ pub fn validate_path(raw: &str) -> Result<PathBuf, FilewellError> {
     }
     Ok(path.to_path_buf())
 }
+
+/// Refuses a path that does not exist, before the filesystem or shell is asked.
+pub fn must_exist(path: &Path) -> Result<(), FilewellError> {
+    if path.exists() {
+        Ok(())
+    } else {
+        Err(FilewellError::new(ErrorCode::NotFound, "That item no longer exists.").with_path(path.display().to_string()))
+    }
+}

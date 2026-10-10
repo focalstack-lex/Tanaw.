@@ -35,3 +35,11 @@ fn windows_drive_forms() {
     assert_eq!(validate_path("C:Users").unwrap_err().code, ErrorCode::InvalidPath);
     assert_eq!(validate_path("\\Users").unwrap_err().code, ErrorCode::InvalidPath);
 }
+
+#[test]
+fn a_missing_item_is_reported_before_the_shell_is_asked() {
+    let dir = tempfile::tempdir().unwrap();
+    let missing = dir.path().join("gone.txt");
+    assert_eq!(must_exist(&missing).unwrap_err().code, ErrorCode::NotFound);
+    assert!(must_exist(dir.path()).is_ok());
+}

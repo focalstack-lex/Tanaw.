@@ -11,7 +11,7 @@ use tauri_plugin_opener::OpenerExt;
 
 use crate::error::{ErrorCode, FilewellError};
 use crate::fs::run_blocking;
-use crate::paths::validate_path;
+use crate::paths::{must_exist, validate_path};
 
 #[cfg(test)]
 mod tests;
@@ -83,22 +83,14 @@ pub fn known() -> Vec<KnownFolder> {
     .collect()
 }
 
-pub fn must_exist(path: &Path) -> Result<(), FilewellError> {
-    if path.exists() {
-        Ok(())
-    } else {
-        Err(FilewellError::new(ErrorCode::NotFound, "That item no longer exists.").with_path(path.display().to_string()))
-    }
-}
-
 #[tauri::command]
 pub async fn list_drives() -> Result<Vec<Drive>, FilewellError> {
     run_blocking(|| Ok(drives())).await
 }
 
 #[tauri::command]
-pub fn known_folders() -> Vec<KnownFolder> {
-    known()
+pub async fn known_folders() -> Result<Vec<KnownFolder>, FilewellError> {
+    run_blocking(|| Ok(known())).await
 }
 
 #[tauri::command]
