@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-10T04:07:31.090Z
-commit: 5b19d3a
-fingerprint: e2f0b37c75a55095
+generated: 2026-10-10T04:09:54.815Z
+commit: 77e67b3
+fingerprint: 6ffd64b6c724ca87
 -->
 # Code Map (Agent Navigation)
 
@@ -15,7 +15,7 @@ disagree, the code wins and the map is regenerated.
 ## Summary
 
 - Files indexed: 107
-- Total lines indexed: 8,416
+- Total lines indexed: 8,429
 - Anchor index emitted for files over 300 lines: 3
 
 ### Areas
@@ -24,7 +24,7 @@ disagree, the code wins and the map is regenerated.
 |---|---:|---:|
 | `.` | 4 | 92 |
 | `eslint-rules` | 2 | 140 |
-| `scripts` | 5 | 1,025 |
+| `scripts` | 5 | 1,037 |
 | `src` | 5 | 1,623 |
 | `src-tauri` | 2 | 71 |
 | `src-tauri/src` | 8 | 520 |
@@ -41,7 +41,7 @@ disagree, the code wins and the map is regenerated.
 | `src/components/shell` | 4 | 302 |
 | `src/components/ui` | 7 | 166 |
 | `src/dev` | 1 | 214 |
-| `src/lib` | 17 | 739 |
+| `src/lib` | 17 | 740 |
 | `src/store` | 8 | 483 |
 | `src/tests` | 17 | 792 |
 
@@ -67,9 +67,9 @@ disagree, the code wins and the map is regenerated.
 |---|---:|---|
 | `verify-ui.mjs` | 499 | Verify Ui |
 | `generate-code-map.mjs` | 327 | Agent Navigation Map Generator |
+| `native-browse.mjs` | 76 | Native Browse |
 | `verify-contrast.mjs` | 68 | Verify Contrast |
 | `verify-text.mjs` | 67 | Verify Text |
-| `native-browse.mjs` | 64 | Native Browse |
 
 ## src
 
@@ -209,7 +209,7 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `appCommands.ts` | 98 | AppCommands |
+| `appCommands.ts` | 99 | AppCommands |
 | `commands.ts` | 81 | Commands |
 | `paths.ts` | 66 | Paths |
 | `selection.ts` | 65 | Selection |

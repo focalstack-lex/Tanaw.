@@ -16,12 +16,26 @@ const results = [];
 const record = (step, ok, detail) => { results.push(ok); console.log(`[${ok ? "PASS" : "FAIL"}] ${step}${detail ? " :: " + detail : ""}`); };
 const sleep = (ms) => new Promise((done) => setTimeout(done, ms));
 
+const browser = await chromium.connectOverCDP("http://127.0.0.1:9333").catch((error) => {
+  console.error(`Cannot reach the app on port 9333. Start it first (see the header). ${error.message}`);
+  process.exit(2);
+});
+const page = browser.contexts().flatMap((c) => c.pages()).find((p) => p.url().startsWith("http://localhost:1420"));
+if (!page) {
+  console.error("Connected, but no Filewell page at http://localhost:1420 is open.");
+  await browser.close();
+  process.exit(2);
+}
+
 const live = mkdtempSync(join(tmpdir(), "filewell-live-"));
 const big = mkdtempSync(join(tmpdir(), "filewell-big-"));
+// Runs on every exit, including a failed step that throws, so the 10,000-file
+// folder never outlives the check.
+process.on("exit", () => {
+  rmSync(live, { recursive: true, force: true });
+  rmSync(big, { recursive: true, force: true });
+});
 for (let i = 0; i < 10_000; i += 1) writeFileSync(join(big, `file-${String(i).padStart(5, "0")}.txt`), "");
-
-const browser = await chromium.connectOverCDP("http://127.0.0.1:9333");
-const page = browser.contexts().flatMap((c) => c.pages()).find((p) => p.url().startsWith("http://localhost:1420"));
 const errors = [];
 page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
 await page.reload({ waitUntil: "domcontentloaded" });
@@ -56,8 +70,6 @@ record("A real 10,000-file folder shows its first rows quickly and stays virtual
 
 record("No console errors in the real webview", errors.length === 0, errors.join(" | ").slice(0, 300));
 await browser.close();
-rmSync(live, { recursive: true, force: true });
-rmSync(big, { recursive: true, force: true });
 const failed = results.filter((ok) => !ok).length;
 console.log(`${results.length - failed}/${results.length} native browsing checks passed`);
 process.exit(failed === 0 ? 0 : 1);

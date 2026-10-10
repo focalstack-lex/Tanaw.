@@ -18,11 +18,12 @@ export function buildAppCommands(): Command[] {
   const current = () => activeTab(tabs());
   const browsing = () => current().view === "browser" && Boolean(current().path);
   const listing = () => useListings.getState().byTab[current().id]?.listing ?? null;
-  // The listing the user sees: ready, and for the folder the tab is on now.
+  // The listing the user sees, for the folder the tab is on now. A reload of the
+  // same folder keeps its rows while loading, so commands stay live through it.
   const shown = () => {
     const state = useListings.getState().byTab[current().id];
     const path = current().path;
-    return state?.status === "ready" && state.listing && path && samePath(state.listing.path, path) ? state.listing : null;
+    return state?.listing && path && samePath(state.listing.path, path) ? state.listing : null;
   };
   const focused = (): Entry | null => {
     const selection = useSelection.getState().of(current().id);
