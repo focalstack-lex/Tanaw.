@@ -6,6 +6,8 @@ mod app;
 mod data;
 mod db;
 mod error;
+mod fs;
+mod paths;
 mod startup;
 mod state;
 
@@ -59,6 +61,8 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             app::get_app_info,
+            fs::listing::list_dir,
+            fs::listing::stat,
             data::settings::get_settings,
             data::settings::set_setting,
         ]);

@@ -380,10 +380,10 @@ renderer calls commands only through `src/lib/ipc.ts`, one typed function per co
 ### 6.1 Shared types
 
 ```ts
-type EntryKind = "file" | "dir" | "symlink";
+type EntryKind = "file" | "dir"; // the link target's kind; links carry isLink
 interface Entry { name: string; path: string; kind: EntryKind; size: number; modified: number;
-  created: number; hidden: boolean; readonly: boolean; ext: string }
-interface DirListing { path: string; entries: Entry[]; total: number; truncated: boolean }
+  created: number; hidden: boolean; readonly: boolean; isLink: boolean; ext: string }
+interface DirListing { path: string; entries: Entry[]; total: number; truncated: boolean; skipped: number }
 interface Sort { key: "name" | "size" | "modified" | "kind"; dir: "asc" | "desc" }
 interface Conflict { source: string; target: string; kind: "file" | "dir" }
 type Resolution = "replace" | "keepBoth" | "skip";

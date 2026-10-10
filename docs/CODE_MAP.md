@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-10T00:52:41.732Z
-commit: 78ce22f
-fingerprint: 43d696c4388285bd
+generated: 2026-10-10T03:04:29.517Z
+commit: 0c6fb47
+fingerprint: 0d87f95d0d48003a
 -->
 # Code Map (Agent Navigation)
 
@@ -14,8 +14,8 @@ disagree, the code wins and the map is regenerated.
 
 ## Summary
 
-- Files indexed: 67
-- Total lines indexed: 4,690
+- Files indexed: 74
+- Total lines indexed: 5,187
 - Anchor index emitted for files over 300 lines: 3
 
 ### Areas
@@ -27,9 +27,11 @@ disagree, the code wins and the map is regenerated.
 | `scripts` | 4 | 812 |
 | `src` | 5 | 1,079 |
 | `src-tauri` | 2 | 62 |
-| `src-tauri/src` | 6 | 291 |
+| `src-tauri/src` | 7 | 330 |
 | `src-tauri/src/data` | 3 | 215 |
 | `src-tauri/src/db` | 3 | 284 |
+| `src-tauri/src/fs` | 5 | 420 |
+| `src-tauri/src/paths` | 1 | 38 |
 | `src-tauri/src/startup` | 1 | 30 |
 | `src/components/home` | 1 | 18 |
 | `src/components/palette` | 1 | 138 |
@@ -88,8 +90,9 @@ disagree, the code wins and the map is regenerated.
 | File | Lines | Purpose |
 |---|---:|---|
 | `error.rs` | 94 | Error |
-| `lib.rs` | 71 | Lib |
+| `lib.rs` | 75 | Lib |
 | `startup.rs` | 64 | Startup |
+| `paths.rs` | 35 | Paths |
 | `state.rs` | 31 | State |
 | `app.rs` | 24 | App |
 | `main.rs` | 7 | Main |
@@ -109,6 +112,22 @@ disagree, the code wins and the map is regenerated.
 | `mod.rs` | 138 | Mod |
 | `tests.rs` | 96 | Tests |
 | `migrations/0001_init.sql` | 50 | Init |
+
+## src-tauri/src/fs
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `listing.rs` | 207 | Listing |
+| `listing/tests.rs` | 110 | Tests |
+| `sort.rs` | 55 | Sort |
+| `sort/tests.rs` | 30 | Tests |
+| `mod.rs` | 18 | Mod |
+
+## src-tauri/src/paths
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `tests.rs` | 38 | Tests |
 
 ## src-tauri/src/startup
 
