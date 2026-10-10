@@ -10,6 +10,7 @@ import { useListings } from "../../store/listings";
 import { useSelection } from "../../store/selection";
 import { useSettings } from "../../store/settings";
 import type { Tab } from "../../store/tabs";
+import { useUi } from "../../store/ui";
 import type { Entry } from "../../types";
 import { Button } from "../ui/Button";
 import { EmptyState } from "../ui/EmptyState";
@@ -60,6 +61,7 @@ export function BrowserView({ tab }: { tab: Tab }) {
   const listing = state?.listing ?? null;
   const previousPaths = useRef<string[]>([]);
   const previousFolder = useRef<string | null>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!listing) return;
@@ -73,6 +75,22 @@ export function BrowserView({ tab }: { tab: Tab }) {
     previousPaths.current = nextPaths;
     previousFolder.current = listing.path;
   }, [tab.id, listing]);
+
+  // After a typed path, focus the new folder's file view once it has loaded.
+  const status = state?.status;
+  useEffect(() => {
+    const wanted = useUi.getState().focusViewFor;
+    if (wanted === null || !status) return;
+    if (status === "error") {
+      useUi.getState().requestViewFocus(null);
+    } else if (status === "ready" && listing && samePath(listing.path, wanted)) {
+      useUi.getState().requestViewFocus(null);
+      if (listing.entries.length === 0) return;
+      requestAnimationFrame(() => {
+        bodyRef.current?.querySelector<HTMLElement>('[data-testid="file-list"], [data-testid="file-grid"]')?.focus();
+      });
+    }
+  }, [status, listing]);
 
   const onAction = useCallback(
     (action: EntryAction) => {
@@ -117,7 +135,7 @@ export function BrowserView({ tab }: { tab: Tab }) {
           {notices.join(" ")}
         </p>
       )}
-      <div className="browser-body">{body}</div>
+      <div ref={bodyRef} className="browser-body">{body}</div>
       {menu && <ContextMenu tab={tab} entry={menu.entry} x={menu.x} y={menu.y} onClose={closeMenu} />}
     </section>
   );

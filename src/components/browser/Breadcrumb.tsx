@@ -61,7 +61,7 @@ export function Breadcrumb({ tab }: { tab: Tab }) {
     }
     stopEditing();
     useTabs.getState().navigate(tab.id, target);
-    returnFocus();
+    useUi.getState().requestViewFocus(target);
   };
 
   if (editing) {

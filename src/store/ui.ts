@@ -37,6 +37,9 @@ interface UiState {
   /** Bumped by the "Edit the folder path" command; the breadcrumb opens its field. */
   pathEditRequest: number;
   requestPathEdit: () => void;
+  /** Folder whose file view should take focus once it has loaded (set after a typed path). */
+  focusViewFor: string | null;
+  requestViewFocus: (path: string | null) => void;
 }
 
 const TOAST_MS: Record<ToastKind, number> = { info: 6000, success: 6000, error: 10000 };
@@ -74,4 +77,6 @@ export const useUi = create<UiState>((set, get) => ({
 
   pathEditRequest: 0,
   requestPathEdit: () => set((state) => ({ pathEditRequest: state.pathEditRequest + 1 })),
+  focusViewFor: null,
+  requestViewFocus: (path) => set({ focusViewFor: path }),
 }));

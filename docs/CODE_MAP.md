@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-10T03:38:41.242Z
-commit: 16052df
-fingerprint: 669283891308e278
+generated: 2026-10-10T03:41:15.844Z
+commit: b61a527
+fingerprint: bc83cef7ea1fea47
 -->
 # Code Map (Agent Navigation)
 
@@ -15,7 +15,7 @@ disagree, the code wins and the map is regenerated.
 ## Summary
 
 - Files indexed: 103
-- Total lines indexed: 7,952
+- Total lines indexed: 7,975
 - Anchor index emitted for files over 300 lines: 3
 
 ### Areas
@@ -34,7 +34,7 @@ disagree, the code wins and the map is regenerated.
 | `src-tauri/src/paths` | 1 | 46 |
 | `src-tauri/src/shell` | 1 | 26 |
 | `src-tauri/src/startup` | 1 | 30 |
-| `src/components/browser` | 8 | 723 |
+| `src/components/browser` | 8 | 741 |
 | `src/components/home` | 1 | 62 |
 | `src/components/palette` | 1 | 140 |
 | `src/components/settings` | 1 | 77 |
@@ -42,7 +42,7 @@ disagree, the code wins and the map is regenerated.
 | `src/components/ui` | 7 | 166 |
 | `src/dev` | 1 | 214 |
 | `src/lib` | 17 | 733 |
-| `src/store` | 7 | 425 |
+| `src/store` | 7 | 430 |
 | `src/tests` | 15 | 656 |
 
 ## .
@@ -150,8 +150,8 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
+| `BrowserView.tsx` | 143 | BrowserView |
 | `Breadcrumb.tsx` | 132 | Breadcrumb |
-| `BrowserView.tsx` | 125 | BrowserView |
 | `ContextMenu.tsx` | 118 | ContextMenu |
 | `FileList.tsx` | 117 | FileList |
 | `useFileKeys.ts` | 86 | UseFileKeys |
@@ -231,7 +231,7 @@ disagree, the code wins and the map is regenerated.
 | File | Lines | Purpose |
 |---|---:|---|
 | `tabs.ts` | 170 | Tabs |
-| `ui.ts` | 78 | Ui |
+| `ui.ts` | 83 | Ui |
 | `settings.ts` | 52 | Settings |
 | `listings.ts` | 51 | Listings |
 | `places.ts` | 34 | Places |
