@@ -3,8 +3,9 @@ import { describeError } from "../../lib/errors";
 import { openEntry, reloadTab } from "../../lib/fileActions";
 import { ipc } from "../../lib/ipc";
 import { samePath } from "../../lib/paths";
-import { pruneSelection } from "../../lib/selection";
+import { EMPTY_SELECTION, pruneSelection } from "../../lib/selection";
 import { useDelayed } from "../../lib/useDelayed";
+import { queueWatch } from "../../lib/watchQueue";
 import { useListings } from "../../store/listings";
 import { useSelection } from "../../store/selection";
 import { useSettings } from "../../store/settings";
@@ -35,7 +36,9 @@ export function BrowserView({ tab }: { tab: Tab }) {
     if (!path) return;
     let active = true;
     let stop: (() => void) | undefined;
-    ipc.watchDir(tab.id, path).catch((error: unknown) => console.warn("Filewell could not watch this folder", error));
+    void queueWatch(tab.id, () =>
+      ipc.watchDir(tab.id, path).catch((error: unknown) => console.warn("Filewell could not watch this folder", error)),
+    );
     ipc
       .onDirChanged((changed) => {
         if (samePath(changed, path)) void reloadTab(tab.id);
@@ -48,19 +51,27 @@ export function BrowserView({ tab }: { tab: Tab }) {
     return () => {
       active = false;
       stop?.();
-      ipc.unwatch(tab.id).catch((error: unknown) => console.warn("Filewell could not stop watching", error));
+      void queueWatch(tab.id, () =>
+        ipc.unwatch(tab.id).catch((error: unknown) => console.warn("Filewell could not stop watching", error)),
+      );
     };
   }, [tab.id, path]);
 
   const listing = state?.listing ?? null;
   const previousPaths = useRef<string[]>([]);
+  const previousFolder = useRef<string | null>(null);
 
   useEffect(() => {
     if (!listing) return;
     const store = useSelection.getState();
     const nextPaths = listing.entries.map((entry) => entry.path);
-    store.put(tab.id, pruneSelection(store.of(tab.id), previousPaths.current, nextPaths));
+    if (previousFolder.current !== null && !samePath(previousFolder.current, listing.path)) {
+      store.put(tab.id, EMPTY_SELECTION);
+    } else {
+      store.put(tab.id, pruneSelection(store.of(tab.id), previousPaths.current, nextPaths));
+    }
     previousPaths.current = nextPaths;
+    previousFolder.current = listing.path;
   }, [tab.id, listing]);
 
   const onAction = useCallback(
@@ -89,9 +100,9 @@ export function BrowserView({ tab }: { tab: Tab }) {
   } else if (entries.length === 0) {
     body = <EmptyState message="This folder is empty." />;
   } else if (viewMode === "grid") {
-    body = <FileGrid tab={tab} entries={entries} onAction={onAction} />;
+    body = <FileGrid key={`${tab.id}:${listing.path}`} tab={tab} entries={entries} onAction={onAction} />;
   } else {
-    body = <FileList tab={tab} entries={entries} onAction={onAction} />;
+    body = <FileList key={`${tab.id}:${listing.path}`} tab={tab} entries={entries} onAction={onAction} />;
   }
 
   const notices: string[] = [];

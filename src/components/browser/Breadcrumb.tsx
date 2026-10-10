@@ -30,7 +30,10 @@ export function Breadcrumb({ tab }: { tab: Tab }) {
   }, [editRequest]);
 
   useEffect(() => {
-    if (editing) input.current?.select();
+    if (editing) {
+      input.current?.focus();
+      input.current?.select();
+    }
   }, [editing]);
 
   // Long paths keep their deepest folders in view.
@@ -43,6 +46,13 @@ export function Breadcrumb({ tab }: { tab: Tab }) {
     setProblem(null);
   };
 
+  // The field unmounts on Enter or Escape; hand focus back to the file view after the re-render.
+  const returnFocus = () => {
+    requestAnimationFrame(() => {
+      document.querySelector<HTMLElement>('[data-testid="file-list"], [data-testid="file-grid"]')?.focus();
+    });
+  };
+
   const commit = () => {
     const target = normalizeInputPath(draft);
     if (!target) {
@@ -51,6 +61,7 @@ export function Breadcrumb({ tab }: { tab: Tab }) {
     }
     stopEditing();
     useTabs.getState().navigate(tab.id, target);
+    returnFocus();
   };
 
   if (editing) {
@@ -73,6 +84,7 @@ export function Breadcrumb({ tab }: { tab: Tab }) {
               event.preventDefault();
               event.stopPropagation();
               stopEditing();
+              returnFocus();
             }
           }}
           onBlur={stopEditing}

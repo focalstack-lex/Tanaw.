@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-10T03:34:10.974Z
-commit: d120e95
-fingerprint: b9e649e8a702040a
+generated: 2026-10-10T03:38:41.242Z
+commit: 16052df
+fingerprint: 669283891308e278
 -->
 # Code Map (Agent Navigation)
 
@@ -14,8 +14,8 @@ disagree, the code wins and the map is regenerated.
 
 ## Summary
 
-- Files indexed: 101
-- Total lines indexed: 7,888
+- Files indexed: 103
+- Total lines indexed: 7,952
 - Anchor index emitted for files over 300 lines: 3
 
 ### Areas
@@ -34,16 +34,16 @@ disagree, the code wins and the map is regenerated.
 | `src-tauri/src/paths` | 1 | 46 |
 | `src-tauri/src/shell` | 1 | 26 |
 | `src-tauri/src/startup` | 1 | 30 |
-| `src/components/browser` | 8 | 699 |
+| `src/components/browser` | 8 | 723 |
 | `src/components/home` | 1 | 62 |
 | `src/components/palette` | 1 | 140 |
 | `src/components/settings` | 1 | 77 |
 | `src/components/shell` | 4 | 302 |
 | `src/components/ui` | 7 | 166 |
 | `src/dev` | 1 | 214 |
-| `src/lib` | 16 | 716 |
+| `src/lib` | 17 | 733 |
 | `src/store` | 7 | 425 |
-| `src/tests` | 14 | 633 |
+| `src/tests` | 15 | 656 |
 
 ## .
 
@@ -150,11 +150,11 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `Breadcrumb.tsx` | 120 | Breadcrumb |
+| `Breadcrumb.tsx` | 132 | Breadcrumb |
+| `BrowserView.tsx` | 125 | BrowserView |
 | `ContextMenu.tsx` | 118 | ContextMenu |
 | `FileList.tsx` | 117 | FileList |
-| `BrowserView.tsx` | 114 | BrowserView |
-| `useFileKeys.ts` | 85 | UseFileKeys |
+| `useFileKeys.ts` | 86 | UseFileKeys |
 | `FileGrid.tsx` | 84 | FileGrid |
 | `Toolbar.tsx` | 40 | Toolbar |
 | `FileIcon.tsx` | 21 | FileIcon |
@@ -222,6 +222,7 @@ disagree, the code wins and the map is regenerated.
 | `fileTypes.ts` | 24 | FileTypes |
 | `errors.ts` | 22 | Errors |
 | `useRestoreFocus.ts` | 18 | UseRestoreFocus |
+| `watchQueue.ts` | 17 | WatchQueue |
 | `useDelayed.ts` | 16 | UseDelayed |
 | `defaults.ts` | 14 | Defaults |
 
@@ -253,6 +254,7 @@ disagree, the code wins and the map is regenerated.
 | `textInvariants.test.ts` | 41 | TextInvariants.Test |
 | `paths.test.ts` | 35 | Paths.Test |
 | `featureMap.test.ts` | 31 | FeatureMap.Test |
+| `watchQueue.test.ts` | 23 | WatchQueue.Test |
 | `panel.test.ts` | 14 | Panel.Test |
 | `theme.test.ts` | 12 | Theme.Test |
 

@@ -15,6 +15,7 @@ export function useFileKeys(tab: Tab, entries: Entry[], columns: number, scrollT
   const typed = useRef({ text: "", at: 0 });
 
   return (event: KeyboardEvent<HTMLElement>) => {
+    if (event.target !== event.currentTarget) return;
     if (event.altKey || event.metaKey) return;
     const paths = entries.map((entry) => entry.path);
     const selection = useSelection.getState().of(tab.id);
