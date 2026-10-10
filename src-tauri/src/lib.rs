@@ -8,6 +8,7 @@ mod db;
 mod error;
 mod fs;
 mod paths;
+mod shell;
 mod startup;
 mod state;
 
@@ -38,6 +39,7 @@ pub fn run() {
                 .build(),
         )
         .plugin(tauri_plugin_window_state::Builder::default().build())
+        .plugin(tauri_plugin_opener::init())
         .setup(|app| {
             // An Err returned from setup becomes a panic inside Tauri, and release
             // builds abort on panic with no console: the window would flash and
@@ -61,10 +63,17 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             app::get_app_info,
-            fs::listing::list_dir,
-            fs::listing::stat,
             data::settings::get_settings,
             data::settings::set_setting,
+            fs::listing::list_dir,
+            fs::listing::stat,
+            fs::watch::watch_dir,
+            fs::watch::unwatch,
+            shell::list_drives,
+            shell::known_folders,
+            shell::open_path,
+            shell::open_with,
+            shell::reveal_in_explorer,
         ]);
 
     if let Err(error) = builder.run(tauri::generate_context!()) {

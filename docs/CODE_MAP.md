@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-10T03:10:30.421Z
-commit: 484ef25
-fingerprint: 426f3dccb1f4f1d0
+generated: 2026-10-10T03:22:28.232Z
+commit: ed27a40
+fingerprint: a530bdf3d5412353
 -->
 # Code Map (Agent Navigation)
 
@@ -14,8 +14,8 @@ disagree, the code wins and the map is regenerated.
 
 ## Summary
 
-- Files indexed: 74
-- Total lines indexed: 5,240
+- Files indexed: 78
+- Total lines indexed: 5,607
 - Anchor index emitted for files over 300 lines: 3
 
 ### Areas
@@ -26,12 +26,13 @@ disagree, the code wins and the map is regenerated.
 | `eslint-rules` | 2 | 140 |
 | `scripts` | 4 | 812 |
 | `src` | 5 | 1,079 |
-| `src-tauri` | 2 | 62 |
-| `src-tauri/src` | 7 | 330 |
+| `src-tauri` | 2 | 71 |
+| `src-tauri/src` | 8 | 519 |
 | `src-tauri/src/data` | 3 | 215 |
 | `src-tauri/src/db` | 3 | 284 |
-| `src-tauri/src/fs` | 5 | 473 |
+| `src-tauri/src/fs` | 7 | 607 |
 | `src-tauri/src/paths` | 1 | 38 |
+| `src-tauri/src/shell` | 1 | 35 |
 | `src-tauri/src/startup` | 1 | 30 |
 | `src/components/home` | 1 | 18 |
 | `src/components/palette` | 1 | 138 |
@@ -82,18 +83,19 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `Cargo.toml` | 58 | Cargo |
+| `Cargo.toml` | 67 | Cargo |
 | `build.rs` | 4 | Build |
 
 ## src-tauri/src
 
 | File | Lines | Purpose |
 |---|---:|---|
+| `shell.rs` | 178 | Shell |
 | `error.rs` | 94 | Error |
-| `lib.rs` | 75 | Lib |
+| `lib.rs` | 84 | Lib |
 | `startup.rs` | 64 | Startup |
 | `paths.rs` | 35 | Paths |
-| `state.rs` | 31 | State |
+| `state.rs` | 33 | State |
 | `app.rs` | 24 | App |
 | `main.rs` | 7 | Main |
 
@@ -119,15 +121,23 @@ disagree, the code wins and the map is regenerated.
 |---|---:|---|
 | `listing.rs` | 211 | Listing |
 | `listing/tests.rs` | 159 | Tests |
+| `watch.rs` | 91 | Watch |
 | `sort.rs` | 55 | Sort |
+| `watch/tests.rs` | 42 | Tests |
 | `sort/tests.rs` | 30 | Tests |
-| `mod.rs` | 18 | Mod |
+| `mod.rs` | 19 | Mod |
 
 ## src-tauri/src/paths
 
 | File | Lines | Purpose |
 |---|---:|---|
 | `tests.rs` | 38 | Tests |
+
+## src-tauri/src/shell
+
+| File | Lines | Purpose |
+|---|---:|---|
+| `tests.rs` | 35 | Tests |
 
 ## src-tauri/src/startup
 

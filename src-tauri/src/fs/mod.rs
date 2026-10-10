@@ -2,6 +2,7 @@
 
 pub mod listing;
 pub mod sort;
+pub mod watch;
 
 use crate::error::{ErrorCode, FilewellError};
 

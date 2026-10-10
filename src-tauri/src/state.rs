@@ -6,18 +6,20 @@ use std::sync::{Mutex, MutexGuard};
 use rusqlite::Connection;
 
 use crate::error::FilewellError;
+use crate::fs::watch::Watchers;
 
-/// The database connection sits behind a mutex because commands run on a
-/// thread pool; SQLite in WAL mode makes the critical sections short.
+/// The database connection sits behind a mutex because commands can run on
+/// several threads; SQLite in WAL mode keeps the critical sections short.
 pub struct AppState {
     db: Mutex<Connection>,
     pub data_dir: PathBuf,
     pub database_recovered: bool,
+    pub watchers: Watchers,
 }
 
 impl AppState {
     pub fn new(connection: Connection, data_dir: PathBuf, database_recovered: bool) -> Self {
-        Self { db: Mutex::new(connection), data_dir, database_recovered }
+        Self { db: Mutex::new(connection), data_dir, database_recovered, watchers: Watchers::default() }
     }
 
     /// Locks the connection. A poisoned mutex means an earlier command panicked

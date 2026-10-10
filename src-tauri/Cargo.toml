@@ -30,12 +30,21 @@ rusqlite = { version = "0.40", features = ["bundled"] }
 # Error enum derivation and the logging facade.
 thiserror = "2"
 log = "0.4"
+# Open files in their default app and reveal them in Explorer, called from Rust only.
+tauri-plugin-opener = "2"
+# Drive cards and the This PC list: mount point, label, size and free space.
+sysinfo = { version = "0.39", default-features = false, features = ["disk"] }
+# The known folders (Desktop, Documents, Downloads, Pictures, Music, Videos, home).
+dirs = "7"
+# Folder change events, debounced, for live refresh (spec 5.8).
+notify-debouncer-mini = "0.7"
 
 [target.'cfg(windows)'.dependencies]
 # A startup failure happens inside Tauri's setup, on the main thread, before the
 # renderer exists, so the only way to tell the user is a native Win32 message box.
+# The same crate provides the Open with dialog (SHOpenWithDialog).
 # Same version tao, tauri and wry already depend on, so it adds no new crate.
-windows = { version = "0.62", features = ["Win32_UI_WindowsAndMessaging"] }
+windows = { version = "0.62", features = ["Win32_Foundation", "Win32_System_Com", "Win32_UI_Shell", "Win32_UI_WindowsAndMessaging"] }
 
 [dev-dependencies]
 tempfile = "3"
