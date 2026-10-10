@@ -64,6 +64,7 @@ export function FileGrid({ tab, entries, onAction }: FileViewProps) {
                   onClick={(event) => select(index, clickMode(event))}
                   onDoubleClick={() => onAction({ kind: "open", entry })}
                   onContextMenu={(event) => {
+                    event.currentTarget.closest<HTMLElement>('[role="grid"]')?.focus();
                     event.preventDefault();
                     if (!useSelection.getState().of(tab.id).selected.has(entry.path)) select(index, "replace");
                     onAction({ kind: "menu", entry, x: event.clientX, y: event.clientY });

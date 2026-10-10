@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-10T03:45:50.024Z
-commit: f116f75
-fingerprint: 010f185acac70650
+generated: 2026-10-10T03:55:32.039Z
+commit: 1dae2d3
+fingerprint: de4bc66a1250bdf1
 -->
 # Code Map (Agent Navigation)
 
@@ -15,7 +15,7 @@ disagree, the code wins and the map is regenerated.
 ## Summary
 
 - Files indexed: 103
-- Total lines indexed: 8,138
+- Total lines indexed: 8,131
 - Anchor index emitted for files over 300 lines: 3
 
 ### Areas
@@ -34,7 +34,7 @@ disagree, the code wins and the map is regenerated.
 | `src-tauri/src/paths` | 1 | 46 |
 | `src-tauri/src/shell` | 1 | 26 |
 | `src-tauri/src/startup` | 1 | 30 |
-| `src/components/browser` | 8 | 755 |
+| `src/components/browser` | 8 | 748 |
 | `src/components/home` | 1 | 62 |
 | `src/components/palette` | 1 | 140 |
 | `src/components/settings` | 1 | 77 |
@@ -150,12 +150,12 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `BrowserView.tsx` | 157 | BrowserView |
+| `BrowserView.tsx` | 143 | BrowserView |
 | `Breadcrumb.tsx` | 132 | Breadcrumb |
-| `ContextMenu.tsx` | 118 | ContextMenu |
-| `FileList.tsx` | 117 | FileList |
+| `ContextMenu.tsx` | 123 | ContextMenu |
+| `FileList.tsx` | 118 | FileList |
 | `useFileKeys.ts` | 86 | UseFileKeys |
-| `FileGrid.tsx` | 84 | FileGrid |
+| `FileGrid.tsx` | 85 | FileGrid |
 | `Toolbar.tsx` | 40 | Toolbar |
 | `FileIcon.tsx` | 21 | FileIcon |
 

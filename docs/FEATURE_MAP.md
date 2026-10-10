@@ -86,14 +86,13 @@ Events: `dir-changed { path }` (debounced 300 ms). Piece 2b adds `op-progress` a
 13. Places: Home shows 2 `drive-card`s; the sidebar lists 2 `place-drive` and 7 `place-folder` entries.
 14. Drive: clicking the first `drive-card` shows `file-list` with rows Program Files, Users, Windows (hidden entries filtered) and crumb `C:`.
 15. History: double-click Users then dev, click the `C:` crumb, then `Alt+ArrowLeft` twice, `Alt+ArrowRight` and `Alt+ArrowUp` land on dev, Users, dev, Users.
-16. Big folder: `Control+KeyL`, type `D:Big folder`, Enter; `file-00001.txt` shows in under 2 s, `aria-rowcount` is 10,001, fewer than 100 rows are in the DOM, and `End` selects `file-10000.txt`.
-17. Selection: in `C:UsersdevDocuments` rows are in natural order; click, `Shift+ArrowDown` twice selects 3 and `status-selection` starts with "3 selected"; `Control+KeyA` selects all 4.
+16. Big folder: `Control+KeyL`, type `D:\Big folder`, Enter; `file-00001.txt` shows in under 2 s, `aria-rowcount` is 10,001, fewer than 100 rows are in the DOM, and `End` selects `file-10000.txt`.
+17. Selection: in `C:\Users\dev\Documents` rows are in natural order; click, `Shift+ArrowDown` twice selects 3 and `status-selection` starts with "3 selected"; `Control+KeyA` selects all 4.
 18. Grid: `Control+Shift+Digit2` shows `file-grid` with 4 `file-tile`s; `Control+Shift+Digit1` returns to `file-list`.
 19. Context menu: right-click `Report.docx` shows `context-menu` with Open, Open with, Show in Explorer and a Copy item; `Escape` closes it and focus returns to `file-list`.
 20. Shell calls: `Enter` records `open`, `Control+Enter` records `reveal`, the menu's Open with records `openWith` in `window.__filewellMock.opened`.
-21. Missing folder: typing `Q:
-owhere` shows "That item no longer exists." with one Try again button.
-22. Browser at 720: the browser view in `C:UsersdevDocuments` passes the layout report at 720 x 480 and no error toast is visible.
+21. Missing folder: typing `Q:\nowhere` shows "That item no longer exists." with one Try again button.
+22. Browser at 720: the browser view in `C:\Users\dev\Documents` passes the layout report at 720 x 480 and no error toast is visible.
 
 Every page load, and the end of each browser context, fails the run if a `.toast-error` is visible; any console error or uncaught page error fails the run.
 

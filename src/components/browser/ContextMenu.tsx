@@ -49,8 +49,13 @@ export function ContextMenu({ tab, entry, x, y, onClose }: ContextMenuProps) {
       left: Math.max(4, Math.min(x, window.innerWidth - rect.width - 4)),
       top: Math.max(4, Math.min(y, window.innerHeight - rect.height - 4)),
     });
-    element.querySelector<HTMLButtonElement>("button")?.focus();
   }, [x, y]);
+
+  // A passive effect, so it runs after useRestoreFocus has recorded the opener
+  // (layout effects would move focus into the menu first).
+  useEffect(() => {
+    menu.current?.querySelector<HTMLButtonElement>("button")?.focus();
+  }, []);
 
   useEffect(() => {
     const away = (event: Event) => {

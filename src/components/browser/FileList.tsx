@@ -93,6 +93,7 @@ export function FileList({ tab, entries, onAction }: FileViewProps) {
                 onClick={(event) => select(item.index, clickMode(event))}
                 onDoubleClick={() => onAction({ kind: "open", entry })}
                 onContextMenu={(event) => {
+                  event.currentTarget.closest<HTMLElement>('[role="grid"]')?.focus();
                   event.preventDefault();
                   if (!useSelection.getState().of(tab.id).selected.has(entry.path)) select(item.index, "replace");
                   onAction({ kind: "menu", entry, x: event.clientX, y: event.clientY });
