@@ -83,11 +83,11 @@ jobs:
   native:
     name: Native crate (cargo test, clippy)
     runs-on: windows-latest
-    # The GitHub repository is still named "Tanaw." (the product's former name) and
+    # The GitHub repository is named "Filewell." (with a trailing period) and
     # Windows strips a trailing period from folder names, so the default workspace
-    # D:\a\Tanaw.\Tanaw. cannot exist and actions/checkout fails. This job clones
-    # into a plain folder instead. Once the repository is renamed to "Filewell",
-    # this job can go back to actions/checkout.
+    # D:\a\Filewell.\Filewell. cannot exist and actions/checkout fails. This job
+    # clones into a plain folder instead. If the repository is renamed to a name
+    # without a trailing period, this job can go back to actions/checkout.
     env:
       SRC: D:\filewell
     defaults:
