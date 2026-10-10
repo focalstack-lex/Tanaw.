@@ -125,7 +125,15 @@ export const useTabs = create<TabsState>((set, get) => ({
     set({ activeId: tabs[(index - 1 + tabs.length) % tabs.length].id });
   },
 
-  setView: (id, view, path = null) => set((state) => ({ tabs: update(state.tabs, id, (tab) => ({ ...tab, view, path })) })),
+  setView: (id, view, path = null) =>
+    set((state) => ({
+      tabs: update(state.tabs, id, (tab) => {
+        // Leaving a folder for another view keeps it in history so Back returns to it.
+        const leaving = tab.view === "browser" && tab.path && view !== "browser";
+        const history = leaving ? { back: [...tab.history.back, tab.path as string], forward: [] } : tab.history;
+        return { ...tab, view, path, history };
+      }),
+    })),
 
   navigate: (id, path) => set((state) => ({ tabs: update(state.tabs, id, (tab) => goTo(tab, path)) })),
 

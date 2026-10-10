@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-10T03:28:52.277Z
-commit: 6d3d4f6
-fingerprint: 63d3462a23c33ce9
+generated: 2026-10-10T03:31:56.356Z
+commit: e78dccc
+fingerprint: fd979a6135f0fd23
 -->
 # Code Map (Agent Navigation)
 
@@ -15,7 +15,7 @@ disagree, the code wins and the map is regenerated.
 ## Summary
 
 - Files indexed: 91
-- Total lines indexed: 6,316
+- Total lines indexed: 6,362
 - Anchor index emitted for files over 300 lines: 3
 
 ### Areas
@@ -40,9 +40,9 @@ disagree, the code wins and the map is regenerated.
 | `src/components/shell` | 4 | 230 |
 | `src/components/ui` | 7 | 166 |
 | `src/dev` | 1 | 93 |
-| `src/lib` | 14 | 603 |
-| `src/store` | 7 | 411 |
-| `src/tests` | 14 | 602 |
+| `src/lib` | 14 | 610 |
+| `src/store` | 7 | 419 |
+| `src/tests` | 14 | 633 |
 
 ## .
 
@@ -196,9 +196,9 @@ disagree, the code wins and the map is regenerated.
 |---|---:|---|
 | `commands.ts` | 81 | Commands |
 | `paths.ts` | 66 | Paths |
+| `selection.ts` | 65 | Selection |
 | `format.ts` | 62 | Format |
 | `shortcuts.ts` | 60 | Shortcuts |
-| `selection.ts` | 58 | Selection |
 | `appCommands.ts` | 48 | AppCommands |
 | `browserGuard.ts` | 47 | BrowserGuard |
 | `ipc.ts` | 45 | Ipc |
@@ -213,7 +213,7 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `tabs.ts` | 162 | Tabs |
+| `tabs.ts` | 170 | Tabs |
 | `ui.ts` | 72 | Ui |
 | `settings.ts` | 52 | Settings |
 | `listings.ts` | 51 | Listings |
@@ -226,7 +226,8 @@ disagree, the code wins and the map is regenerated.
 | File | Lines | Purpose |
 |---|---:|---|
 | `tabs.test.ts` | 75 | Tabs.Test |
-| `navigation.test.ts` | 59 | Navigation.Test |
+| `navigation.test.ts` | 69 | Navigation.Test |
+| `selection.test.ts` | 61 | Selection.Test |
 | `commands.test.ts` | 54 | Commands.Test |
 | `listings.test.ts` | 52 | Listings.Test |
 | `format.test.ts` | 50 | Format.Test |
@@ -234,7 +235,6 @@ disagree, the code wins and the map is regenerated.
 | `browserGuard.test.ts` | 46 | BrowserGuard.Test |
 | `invariants.test.ts` | 43 | Invariants.Test |
 | `textInvariants.test.ts` | 41 | TextInvariants.Test |
-| `selection.test.ts` | 40 | Selection.Test |
 | `paths.test.ts` | 35 | Paths.Test |
 | `featureMap.test.ts` | 31 | FeatureMap.Test |
 | `panel.test.ts` | 14 | Panel.Test |

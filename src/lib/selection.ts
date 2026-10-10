@@ -45,13 +45,20 @@ export function selectAll(paths: string[]): Selection {
   return { selected: new Set(paths), anchor: 0, focus: 0 };
 }
 
-/** After a reload: drop vanished paths and keep the positions in range. */
-export function pruneSelection(state: Selection, paths: string[]): Selection {
-  const present = new Set(paths);
-  const last = Math.max(paths.length - 1, 0);
+/**
+ * After a reload: drop vanished paths and remap anchor and focus through their
+ * paths, so a row inserted or removed above them does not move them to another file.
+ */
+export function pruneSelection(state: Selection, previous: string[], next: string[]): Selection {
+  const present = new Set(next);
+  const last = Math.max(next.length - 1, 0);
+  const remap = (index: number | null): number | null => {
+    const path = index === null ? undefined : previous[index];
+    return path !== undefined && present.has(path) ? next.indexOf(path) : null;
+  };
   return {
     selected: new Set([...state.selected].filter((path) => present.has(path))),
-    anchor: state.anchor !== null && state.anchor <= last ? state.anchor : null,
-    focus: Math.min(state.focus, last),
+    anchor: remap(state.anchor),
+    focus: remap(state.focus) ?? Math.min(state.focus, last),
   };
 }

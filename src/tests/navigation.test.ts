@@ -55,4 +55,14 @@ describe("per-tab navigation", () => {
     expect(tab.sort).toEqual({ key: "size", dir: "desc" });
     expect(tab.viewMode).toBe("grid");
   });
+
+  it("leaving a folder for another view keeps it in history", () => {
+    const tabs = () => useTabs.getState();
+    tabs().navigate(id, "C:\\X");
+    tabs().navigate(id, "C:\\A");
+    tabs().setView(id, "settings");
+    tabs().navigate(id, "C:\\B");
+    tabs().goBack(id);
+    expect(activeTab(tabs()).path).toBe("C:\\A");
+  });
 });
