@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { HardDrive, Usb } from "lucide-react";
 import { formatSize } from "../../lib/format";
 import { usePlaces } from "../../store/places";
@@ -12,6 +13,10 @@ export function HomeView() {
   const drives = usePlaces((state) => state.drives);
   const loaded = usePlaces((state) => state.loaded);
   const tabId = useTabs((state) => activeTab(state).id);
+
+  useEffect(() => {
+    void usePlaces.getState().load();
+  }, []);
 
   return (
     <section className="view" data-testid="home-view">

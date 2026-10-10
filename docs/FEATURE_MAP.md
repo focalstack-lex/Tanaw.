@@ -94,6 +94,8 @@ Events: `dir-changed { path }` (debounced 300 ms). Piece 2b adds `op-progress` a
 21. Missing folder: typing `Q:\nowhere` shows "That item no longer exists." with one Try again button.
 22. Browser at 720: the browser view in `C:\Users\dev\Documents` passes the layout report at 720 x 480 and no error toast is visible.
 
+Native check: `npm run verify:native` drives the real app (real drives, real watcher, a real 10,000-file folder) over CDP. Start the app first with `npm run tauri -- dev --config scripts/tauri.debug.conf.json`; see the header of `scripts/native-browse.mjs`.
+
 Every page load, and the end of each browser context, fails the run if a `.toast-error` is visible; any console error or uncaught page error fails the run.
 
 ## Known traps

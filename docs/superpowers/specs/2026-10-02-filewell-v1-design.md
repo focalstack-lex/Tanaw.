@@ -52,6 +52,7 @@ decision deferred to its own design phase.
 | Name | Filewell, repository `focalstack-lex/Filewell`. Renamed from Tanaw on 2026-10-10: "Tanaw" is used by a tourism platform, and the repository name `Tanaw.` (trailing period) cannot be checked out on Windows runners. Web search found only a small unrelated business app and a for-sale domain using the name; the trademark check is still owed before release | Tanaw, Silip, Linaw, Banaag, Stillroom, Plainview, Lull, Kept, Shelfwise |
 | Architecture | Approach A: Rust does the work, the renderer displays it | Tauri fs plugin from the renderer, hybrid |
 | Reference | Dashboard frame from the Explo mockup, stripped of cloud, sharing and upsell parts | |
+| Drive kind (piece 2a) | `Drive.kind` is narrowed to `"fixed" \| "removable"`: `list_drives` maps `sysinfo`'s `is_removable()` to removable and any disk it does not report as removable (a network drive, if listed) to fixed, until a later piece needs the distinction | `"network"` and `"other"` kinds |
 
 Defaults set without a question, open to veto: theme follows Windows with a manual override;
 hidden and system files hidden by default with a Ctrl+H toggle; no telemetry; long operations
@@ -389,7 +390,7 @@ interface Conflict { source: string; target: string; kind: "file" | "dir" }
 type Resolution = "replace" | "keepBoth" | "skip";
 interface ResolutionPlan { default: Resolution; perItem: Record<string, Resolution> }
 interface Drive { mountPoint: string; label: string; totalBytes: number; availableBytes: number;
-  kind: "fixed" | "removable" | "network" | "other" }
+  kind: "fixed" | "removable" }
 interface TrashItem { id: string; name: string; originalPath: string; deletedAt: number }
 interface FilewellError { code: ErrorCode; message: string; path?: string }
 ```

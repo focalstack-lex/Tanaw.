@@ -1,0 +1,19 @@
+{
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Filewell",
+        "width": 1200,
+        "height": 760,
+        "minWidth": 720,
+        "minHeight": 480,
+        "center": true,
+        "decorations": false,
+        "shadow": true,
+        "dragDropEnabled": true,
+        "additionalBrowserArgs": "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --autoplay-policy=no-user-gesture-required --remote-debugging-port=9333"
+      }
+    ]
+  }
+}

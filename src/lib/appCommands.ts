@@ -2,7 +2,7 @@
 // through registerCommands.
 import { registerCommands, listCommands, type Command } from "./commands";
 import { copyPaths, openWithEntry, reloadTab, revealEntry } from "./fileActions";
-import { parentPath } from "./paths";
+import { parentPath, samePath } from "./paths";
 import { selectAll } from "./selection";
 import { useListings } from "../store/listings";
 import { usePanel } from "../store/panel";
@@ -18,11 +18,17 @@ export function buildAppCommands(): Command[] {
   const current = () => activeTab(tabs());
   const browsing = () => current().view === "browser" && Boolean(current().path);
   const listing = () => useListings.getState().byTab[current().id]?.listing ?? null;
+  // The listing the user sees: ready, and for the folder the tab is on now.
+  const shown = () => {
+    const state = useListings.getState().byTab[current().id];
+    const path = current().path;
+    return state?.status === "ready" && state.listing && path && samePath(state.listing.path, path) ? state.listing : null;
+  };
   const focused = (): Entry | null => {
     const selection = useSelection.getState().of(current().id);
-    return browsing() && selection.selected.size > 0 ? (listing()?.entries[selection.focus] ?? null) : null;
+    return browsing() && selection.selected.size > 0 ? (shown()?.entries[selection.focus] ?? null) : null;
   };
-  const selectedPaths = () => [...useSelection.getState().of(current().id).selected];
+  const selectedPaths = () => (browsing() && shown() ? [...useSelection.getState().of(current().id).selected] : []);
   const sortBy = (key: SortKey, title: string): Command => ({
     id: `sort.${key}`,
     title,

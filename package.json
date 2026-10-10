@@ -18,6 +18,7 @@
     "verify:contrast": "node scripts/verify-contrast.mjs",
     "verify:text": "node scripts/verify-text.mjs",
     "verify:ui": "node scripts/verify-ui.mjs",
+    "verify:native": "node scripts/native-browse.mjs",
     "map:code": "node scripts/generate-code-map.mjs",
     "map:code:check": "node scripts/generate-code-map.mjs --check",
     "verify": "npm run typecheck && npm run lint && npm run verify:text && npm test && npm run verify:contrast && npm run map:code:check",

@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-10T03:55:32.039Z
-commit: 1dae2d3
-fingerprint: de4bc66a1250bdf1
+generated: 2026-10-10T04:07:31.090Z
+commit: 5b19d3a
+fingerprint: e2f0b37c75a55095
 -->
 # Code Map (Agent Navigation)
 
@@ -14,8 +14,8 @@ disagree, the code wins and the map is regenerated.
 
 ## Summary
 
-- Files indexed: 103
-- Total lines indexed: 8,131
+- Files indexed: 107
+- Total lines indexed: 8,416
 - Anchor index emitted for files over 300 lines: 3
 
 ### Areas
@@ -24,8 +24,8 @@ disagree, the code wins and the map is regenerated.
 |---|---:|---:|
 | `.` | 4 | 92 |
 | `eslint-rules` | 2 | 140 |
-| `scripts` | 4 | 961 |
-| `src` | 5 | 1,604 |
+| `scripts` | 5 | 1,025 |
+| `src` | 5 | 1,623 |
 | `src-tauri` | 2 | 71 |
 | `src-tauri/src` | 8 | 520 |
 | `src-tauri/src/data` | 3 | 215 |
@@ -34,16 +34,16 @@ disagree, the code wins and the map is regenerated.
 | `src-tauri/src/paths` | 1 | 46 |
 | `src-tauri/src/shell` | 1 | 26 |
 | `src-tauri/src/startup` | 1 | 30 |
-| `src/components/browser` | 8 | 748 |
-| `src/components/home` | 1 | 62 |
+| `src/components/browser` | 8 | 750 |
+| `src/components/home` | 1 | 67 |
 | `src/components/palette` | 1 | 140 |
 | `src/components/settings` | 1 | 77 |
 | `src/components/shell` | 4 | 302 |
 | `src/components/ui` | 7 | 166 |
 | `src/dev` | 1 | 214 |
-| `src/lib` | 17 | 733 |
-| `src/store` | 7 | 430 |
-| `src/tests` | 15 | 656 |
+| `src/lib` | 17 | 739 |
+| `src/store` | 8 | 483 |
+| `src/tests` | 17 | 792 |
 
 ## .
 
@@ -69,14 +69,15 @@ disagree, the code wins and the map is regenerated.
 | `generate-code-map.mjs` | 327 | Agent Navigation Map Generator |
 | `verify-contrast.mjs` | 68 | Verify Contrast |
 | `verify-text.mjs` | 67 | Verify Text |
+| `native-browse.mjs` | 64 | Native Browse |
 
 ## src
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `styles.css` | 1392 | Styles |
+| `styles.css` | 1400 | Styles |
+| `App.tsx` | 100 | App |
 | `types.ts` | 93 | Types |
-| `App.tsx` | 89 | App |
 | `main.tsx` | 28 | Main |
 | `vite-env.d.ts` | 2 | Vite Env.D |
 
@@ -154,8 +155,8 @@ disagree, the code wins and the map is regenerated.
 | `Breadcrumb.tsx` | 132 | Breadcrumb |
 | `ContextMenu.tsx` | 123 | ContextMenu |
 | `FileList.tsx` | 118 | FileList |
+| `FileGrid.tsx` | 87 | FileGrid |
 | `useFileKeys.ts` | 86 | UseFileKeys |
-| `FileGrid.tsx` | 85 | FileGrid |
 | `Toolbar.tsx` | 40 | Toolbar |
 | `FileIcon.tsx` | 21 | FileIcon |
 
@@ -163,7 +164,7 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `HomeView.tsx` | 62 | HomeView |
+| `HomeView.tsx` | 67 | HomeView |
 
 ## src/components/palette
 
@@ -208,7 +209,7 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `appCommands.ts` | 92 | AppCommands |
+| `appCommands.ts` | 98 | AppCommands |
 | `commands.ts` | 81 | Commands |
 | `paths.ts` | 66 | Paths |
 | `selection.ts` | 65 | Selection |
@@ -234,17 +235,20 @@ disagree, the code wins and the map is regenerated.
 | `ui.ts` | 83 | Ui |
 | `settings.ts` | 52 | Settings |
 | `listings.ts` | 51 | Listings |
-| `places.ts` | 34 | Places |
+| `places.ts` | 46 | Places |
+| `tabSync.ts` | 32 | TabSync |
 | `panel.ts` | 25 | Panel |
-| `selection.ts` | 15 | Selection |
+| `selection.ts` | 24 | Selection |
 
 ## src/tests
 
 | File | Lines | Purpose |
 |---|---:|---|
+| `places.test.ts` | 75 | Places.Test |
 | `tabs.test.ts` | 75 | Tabs.Test |
 | `navigation.test.ts` | 69 | Navigation.Test |
 | `selection.test.ts` | 61 | Selection.Test |
+| `tabSync.test.ts` | 61 | TabSync.Test |
 | `commands.test.ts` | 54 | Commands.Test |
 | `listings.test.ts` | 52 | Listings.Test |
 | `format.test.ts` | 50 | Format.Test |

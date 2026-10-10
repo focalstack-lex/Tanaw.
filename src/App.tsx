@@ -6,6 +6,7 @@ import { ipc, toFilewellError } from "./lib/ipc";
 import { OVERLAY_QUERY, usePanel } from "./store/panel";
 import { usePlaces } from "./store/places";
 import { useSettings } from "./store/settings";
+import { startTabSync } from "./store/tabSync";
 import { activeTab, useTabs } from "./store/tabs";
 import { useUi } from "./store/ui";
 import { BrowserView } from "./components/browser/BrowserView";
@@ -36,6 +37,16 @@ export default function App() {
       useUi.getState().toast("error", title, detail);
     });
   }, [load, setAppInfo]);
+
+  // Per-tab state follows the tabs: navigation clears the selection, closing drops it.
+  useEffect(() => startTabSync(), []);
+
+  // Drives come and go while the app runs; look again when the window is back.
+  useEffect(() => {
+    const onFocus = () => void usePlaces.getState().load();
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, []);
 
   // Crossing the overlay breakpoint closes the panel (it would cover the content)
   // and widening past it docks the panel open again.

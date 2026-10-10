@@ -965,7 +965,7 @@ button {
   align-items: center;
   gap: 2px;
   min-width: 0;
-  height: 32px;
+  height: 34px;
   padding: 0 var(--s-1);
   border: 1px solid var(--border-faint);
   border-radius: var(--r-md);
@@ -981,7 +981,7 @@ button {
 
 .crumb {
   flex: 0 0 auto;
-  height: 24px;
+  height: 32px;
   padding: 0 var(--s-2);
   border-radius: var(--r-sm);
   color: var(--text-muted);
@@ -1078,14 +1078,14 @@ button {
 }
 
 .file-list-header {
-  height: 30px;
+  height: 32px;
   border-bottom: 1px solid var(--border-faint);
   color: var(--text-muted);
   font-size: 12px;
 }
 
 .column-button {
-  height: 26px;
+  min-height: 32px;
   padding: 0 var(--s-1);
   border-radius: var(--r-sm);
   color: inherit;
@@ -1229,6 +1229,7 @@ button {
 }
 
 .file-tile {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1237,6 +1238,13 @@ button {
   height: 104px;
   padding: var(--s-3) var(--s-2) var(--s-2);
   border-radius: var(--r-md);
+}
+
+.tile-check {
+  position: absolute;
+  top: var(--s-1);
+  right: var(--s-1);
+  color: var(--accent);
 }
 
 .tile-name {

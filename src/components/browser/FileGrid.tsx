@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import { Check } from "lucide-react";
 import { EMPTY_SELECTION, selectAt, type SelectMode } from "../../lib/selection";
 import { useSelection } from "../../store/selection";
 import { FileIcon } from "./FileIcon";
@@ -71,6 +72,7 @@ export function FileGrid({ tab, entries, onAction }: FileViewProps) {
                   }}
                   data-testid="file-tile"
                 >
+                  {selected && <Check className="tile-check" size={14} aria-hidden="true" />}
                   <FileIcon entry={entry} size={40} />
                   <span className="tile-name">{entry.name}</span>
                 </div>
