@@ -41,3 +41,52 @@ export interface FilewellError {
   message: string;
   path?: string;
 }
+
+// Browsing (piece 2a). Mirrors src-tauri/src/fs/listing.rs and shell.rs.
+
+export type EntryKind = "file" | "dir";
+
+export interface Entry {
+  name: string;
+  path: string;
+  /** The link target's kind: a link to a folder opens like a folder. */
+  kind: EntryKind;
+  size: number;
+  modified: number;
+  created: number;
+  hidden: boolean;
+  readonly: boolean;
+  isLink: boolean;
+  /** Lowercase extension without the dot; empty for folders. */
+  ext: string;
+}
+
+export interface DirListing {
+  path: string;
+  entries: Entry[];
+  total: number;
+  truncated: boolean;
+  skipped: number;
+}
+
+export type SortKey = "name" | "size" | "modified" | "kind";
+export type SortDir = "asc" | "desc";
+
+export interface Sort {
+  key: SortKey;
+  dir: SortDir;
+}
+
+export interface Drive {
+  mountPoint: string;
+  label: string;
+  totalBytes: number;
+  availableBytes: number;
+  kind: "fixed" | "removable";
+}
+
+export interface KnownFolder {
+  id: string;
+  label: string;
+  path: string;
+}

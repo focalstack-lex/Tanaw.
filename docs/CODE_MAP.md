@@ -1,7 +1,7 @@
 <!-- code-map
-generated: 2026-10-10T03:27:22.479Z
-commit: 111d3a6
-fingerprint: 74e4e588e2bfdfbc
+generated: 2026-10-10T03:28:52.277Z
+commit: 6d3d4f6
+fingerprint: 63d3462a23c33ce9
 -->
 # Code Map (Agent Navigation)
 
@@ -14,8 +14,8 @@ disagree, the code wins and the map is regenerated.
 
 ## Summary
 
-- Files indexed: 78
-- Total lines indexed: 5,614
+- Files indexed: 91
+- Total lines indexed: 6,316
 - Anchor index emitted for files over 300 lines: 3
 
 ### Areas
@@ -25,7 +25,7 @@ disagree, the code wins and the map is regenerated.
 | `.` | 4 | 92 |
 | `eslint-rules` | 2 | 140 |
 | `scripts` | 4 | 812 |
-| `src` | 5 | 1,079 |
+| `src` | 5 | 1,128 |
 | `src-tauri` | 2 | 71 |
 | `src-tauri/src` | 8 | 520 |
 | `src-tauri/src/data` | 3 | 215 |
@@ -40,9 +40,9 @@ disagree, the code wins and the map is regenerated.
 | `src/components/shell` | 4 | 230 |
 | `src/components/ui` | 7 | 166 |
 | `src/dev` | 1 | 93 |
-| `src/lib` | 9 | 347 |
-| `src/store` | 4 | 250 |
-| `src/tests` | 9 | 366 |
+| `src/lib` | 14 | 603 |
+| `src/store` | 7 | 411 |
+| `src/tests` | 14 | 602 |
 
 ## .
 
@@ -74,8 +74,8 @@ disagree, the code wins and the map is regenerated.
 | File | Lines | Purpose |
 |---|---:|---|
 | `styles.css` | 919 | Styles |
+| `types.ts` | 93 | Types |
 | `App.tsx` | 86 | App |
-| `types.ts` | 44 | Types |
 | `main.tsx` | 28 | Main |
 | `vite-env.d.ts` | 2 | Vite Env.D |
 
@@ -195,11 +195,16 @@ disagree, the code wins and the map is regenerated.
 | File | Lines | Purpose |
 |---|---:|---|
 | `commands.ts` | 81 | Commands |
+| `paths.ts` | 66 | Paths |
+| `format.ts` | 62 | Format |
 | `shortcuts.ts` | 60 | Shortcuts |
+| `selection.ts` | 58 | Selection |
 | `appCommands.ts` | 48 | AppCommands |
 | `browserGuard.ts` | 47 | BrowserGuard |
-| `ipc.ts` | 30 | Ipc |
+| `ipc.ts` | 45 | Ipc |
+| `sortEntries.ts` | 31 | SortEntries |
 | `theme.ts` | 27 | Theme |
+| `fileTypes.ts` | 24 | FileTypes |
 | `errors.ts` | 22 | Errors |
 | `useRestoreFocus.ts` | 18 | UseRestoreFocus |
 | `defaults.ts` | 14 | Defaults |
@@ -208,21 +213,29 @@ disagree, the code wins and the map is regenerated.
 
 | File | Lines | Purpose |
 |---|---:|---|
-| `tabs.ts` | 101 | Tabs |
+| `tabs.ts` | 162 | Tabs |
 | `ui.ts` | 72 | Ui |
 | `settings.ts` | 52 | Settings |
+| `listings.ts` | 51 | Listings |
+| `places.ts` | 34 | Places |
 | `panel.ts` | 25 | Panel |
+| `selection.ts` | 15 | Selection |
 
 ## src/tests
 
 | File | Lines | Purpose |
 |---|---:|---|
 | `tabs.test.ts` | 75 | Tabs.Test |
+| `navigation.test.ts` | 59 | Navigation.Test |
 | `commands.test.ts` | 54 | Commands.Test |
+| `listings.test.ts` | 52 | Listings.Test |
+| `format.test.ts` | 50 | Format.Test |
 | `shortcuts.test.ts` | 50 | Shortcuts.Test |
 | `browserGuard.test.ts` | 46 | BrowserGuard.Test |
 | `invariants.test.ts` | 43 | Invariants.Test |
 | `textInvariants.test.ts` | 41 | TextInvariants.Test |
+| `selection.test.ts` | 40 | Selection.Test |
+| `paths.test.ts` | 35 | Paths.Test |
 | `featureMap.test.ts` | 31 | FeatureMap.Test |
 | `panel.test.ts` | 14 | Panel.Test |
 | `theme.test.ts` | 12 | Theme.Test |
